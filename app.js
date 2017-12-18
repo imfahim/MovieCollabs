@@ -18,6 +18,7 @@ const index = require('./controllers/indexController');
 const register = require('./controllers/registerController');
 const login = require('./controllers/loginController');
 const userManager = require('./controllers/user/indexController');
+const subscription = require('./controllers/user/subscriptionController');
 
 // CONFIGURATION
 app.set('view engine', 'ejs');
@@ -44,6 +45,7 @@ app.use('/login', login);
 
 // For Users
 app.use('/home', userManager);
+app.use('/subscribe', subscription);
 
 
 // SERVER
