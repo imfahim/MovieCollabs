@@ -11,9 +11,11 @@ const saltRounds = 10;
 const userModel = require.main.require('./models/user');
 
 // ROUTERS
+/*
 router.get('/', (request, response, next) => {
 	response.render('auth/register');
 });
+*/
 
 router.post('/', [
 

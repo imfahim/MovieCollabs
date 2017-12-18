@@ -6,12 +6,13 @@ const router = express.Router();
 const userModel = require.main.require('./models/user');
 
 // ROUTES
+/*
 router.get('/', (request, response, next) => {
 	response.render('auth/login');
 });
-
+*/
 router.post('/', (request, response) => {
-	
+
 	var user = {
 		username: request.body.username,
 		password: request.body.password

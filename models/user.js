@@ -6,7 +6,7 @@ module.exports = {
 	insert: function(user, callback){
 		var sql = "INSERT INTO users (username, password, email) VALUES ('" + user.username + "', '" + user.password + "', '" + user.email + "')";
 		//var sql = "INSERT INTO users (username, password, email) VALUES (?, ?, ?)";
-		database.execute(sql, false, function(flag){
+		database.execute(sql, function(flag){
 			callback(flag);
 		});
 	},
