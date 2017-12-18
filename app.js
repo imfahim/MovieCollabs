@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const flash = require('express-flash-notification');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const expressLayouts =require('express-ejs-layouts');
+
 
 
 const app = express();
@@ -19,9 +21,12 @@ const userManager = require('./controllers/user/indexController');
 
 // CONFIGURATION
 app.set('view engine', 'ejs');
+app.use(expressLayouts);
+app.set('layout','layouts/header');
 
 
 // MIDDLEWARES
+
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(cookieParser());
 app.use(express.static('public'));
