@@ -1,15 +1,20 @@
 <nav class="navbar navbar-inverse" data-spy="affix" data-offset-top="1000">
  <div class="container-fluid">
    <div class="navbar-header">
-     <a class="navbar-brand" href="#">WebSiteName</a>
+     <a class="navbar-brand" style="margin-left: 0;" href="/"><label style="font-family: 'Trebuchet MS', Helvetica, sans-serif;text-shadow: 3px 2px black;">Watch<label></a>
    </div>
-   <ul class="nav navbar-nav">
+   <ul class="nav navbar-nav" style="padding-left: 30px;">
      <li class="active"><a href="#">Home</a></li>
      <li><a href="#">Browse</a></li>
+     <li><a href="#">Profile</a></li>
+     <li><a href="/subscribe">Subscription</a></li>
      <li><a href="#">About</a></li>
    </ul>
    <ul class="nav navbar-nav navbar-right">
-     <li><a href="#" data-toggle="modal" data-target="#basicModal"><span class="glyphicon glyphicon-log-in"></span> Join</a></li>
+     <%if(!locals.id){%>
+     <li><a href="#" data-toggle="modal" data-target="#basicModal"><span class="glyphicon glyphicon-log-in"></span> Join</a></li><%}%>
+     <%if(locals.id){%>
+       <li><a href="/login/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li><%}%>
    </ul>
  </div>
 </nav>

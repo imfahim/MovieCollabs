@@ -1,9 +1,76 @@
 <%- contentFor('body') %>
 <div class="container">
+  <div class="row">
+    <div class="col-md-8">
+      <div class="well well-lg">slide show of latest 5 movies<br>slide show of latest 5 movies<br>slide show of latest 5 movies
+      slide show of latest 5 movies<br>slide show of latest 5 movies<br>slide show of latest 5 movies
+      slide show of latest 5 movies<br>slide show of latest 5 movies<br>slide show of latest 5 movies
+      slide show of latest 5 movies<br>slide show of latest 5 movies<br>slide show of latest 5 movies
+      slide show of latest 5 movies<br>slide show of latest 5 movies
+    </div>
+    </div>
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-heading">Top Chart</div>
+        <div class="panel-body">
+          <table class="table table-striped">
+            <tbody>
+              <tr>
+                <th>1.</th>
+                <th>name</th>
+                <th>genre</th>
+              </tr>
+              <tr>
+                <th>1.</th>
+                <th>name</th>
+                <th>genre</th>
+              </tr>
+              <tr>
+                <th>1.</th>
+                <th>name</th>
+                <th>genre</th>
+              </tr>
+              <tr>
+                <th>1.</th>
+                <th>name</th>
+                <th>genre</th>
+              </tr>
+              <tr>
+                <th>1.</th>
+                <th>name</th>
+                <th>genre</th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-body">
+      subscribe banner if not subscribed or guest
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">Suggesions</div>
+    <div class="panel-body">
+      list of user choosen Genres from newest to oldest
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">Latest Movies</div>
+    <div class="panel-body">
+      list of new uploaded movies
+    </div>
+  </div>
+  <div class="panel panel-default">
+    <div class="panel-heading">Requests</div>
+    <div class="panel-body">
+      list of ur reqsts movies
+    </div>
+  </div>
   <h1>Hello from User Dashboard</h1>
   <h4>Logged In Username : <strong><%= username %></strong></h4>
+  <h4>Logged In Username ID : <strong><%= id %></strong></h4>
   <br />
-  <form method="GET" action="/login/logout">
-    <input type="submit" class="btn btn-danger" value="Logout" />
-  </form>
 </div>

@@ -5,6 +5,8 @@ const flash = require('express-flash-notification');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const expressLayouts =require('express-ejs-layouts');
+const moment =require('moment');
+
 
 const app = express();
 
@@ -34,6 +36,7 @@ app.use(session({
   saveUninitialized: false,
   resave: false
 }));
+
 app.use(flash(app));
 
 // ROUTES

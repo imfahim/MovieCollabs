@@ -19,14 +19,17 @@ router.post('/', (request, response) => {
 	};
 
 	userModel.validate(user, function(valid){
-		if(valid)
+		if(valid != null)
 		{
 			request.session.loggedUsername = request.body.username;
-			request.flash('success', 'Successfully Registered !', '/home');
+			request.session.loggedId = valid[1];
+
+			request.flash('success', 'Successfully Logged In !', '/home');
+
 		}
 		else
 		{
-			request.flash('fail', 'Incorrect Credentials, Please try again !', '/login');
+			request.flash('fail', 'Incorrect Credentials, Please try again !', '/');
 		}
 	});
 });

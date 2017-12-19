@@ -1,2 +1,56 @@
 <%- contentFor('body') %>
-shona
+<div class="container">
+  <center><div class="well well-sm">
+    <label>Currently:</label>
+      &nbsp;&nbsp;
+      <%if(subscription.status=='on'){%>
+      <text style="color:green">Subscribed</text><br><%}%>
+      <%if(subscription.status=='off'){%>
+        <text style="color:yellow">Not Subscribed</text><br><%}%>
+      <%if(subscription.status=='expired'){%>
+        <text style="color:red">Expired</text>( <%= subscription.movie_count %>Movies)<br><%}%>
+      <%if(subscription.status=='on'){%>
+      <p><%= expire %> remaining</p><%}%>
+  </div>
+  </center>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <form method="POST">
+          <div class="form-group">
+             <p style="font-size:12px">bKash $9.99 to 0124762</p>
+             <input type="text" class="form-control" placeholder="TraX-ID" name="bkash" <%if(subscription.status=='on'){%>disabled<%}%>>
+          </div>
+          <button type="submit" class="btn btn-success pull-right" <%if(subscription.status=='on'){%>disabled<%}%>>Submit</button>
+        </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div class="panel panel-default">
+        <div class="panel-heading">Transaction History</div>
+        <div class="panel-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>bKash ID</th>
+                <th>Month</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% for(var i = 0; i < tranList.length; i++) {%>
+              		<tr>
+              			<td><%= tranList[i].bkash_id %></td>
+                    <td><%= moment(tranList[i].date).format( 'MMMM,YYYY') %></td>
+                    <td>$<%= tranList[i].amount %></td>
+              		</tr>
+              		<% } %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

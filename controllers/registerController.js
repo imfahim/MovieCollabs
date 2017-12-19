@@ -1,5 +1,6 @@
 // DECLARATION
 const express = require('express');
+const moment = require('moment');
 const router = express.Router();
 
 const { check, validationResult } = require('express-validator/check');
@@ -9,6 +10,8 @@ const saltRounds = 10;
 
 // MODELS
 const userModel = require.main.require('./models/user');
+
+const SubscribeModel = require.main.require('./models/subscriber');
 
 // ROUTERS
 /*
@@ -44,13 +47,26 @@ router.post('/', [
     	};
 
       userModel.insert(new_user, function(valid){
-    		if(valid)
+    		if(valid>0)
     		{
-          request.flash('success', 'Successfully Registered !', '/register');
+          var now = moment(new Date());
+          now =moment(now).format("YYYY-MM-DD");
+          var values = {
+            id: valid,
+            start: now,
+          };
+          SubscribeModel.insert(values,function(flag){
+            if(flag){
+              request.flash('success', 'Successfully Registered !', '/');
+            }
+            else{
+              request.flash('fail', 'Error Occured !', '/');
+            }
+          })
     		}
     		else
     		{
-          request.flash('fail', 'Error Occured !', '/register');
+          request.flash('fail', 'Error Occured !', '/');
     		}
     	});
     });

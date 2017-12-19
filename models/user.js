@@ -6,20 +6,20 @@ module.exports = {
 	insert: function(user, callback){
 		var sql = "INSERT INTO users (username, password, email) VALUES ('" + user.username + "', '" + user.password + "', '" + user.email + "')";
 		//var sql = "INSERT INTO users (username, password, email) VALUES (?, ?, ?)";
-		database.execute(sql, function(flag){
+		database.executeGetId(sql, function(flag){
 			callback(flag);
 		});
 	},
 	validate: function(user, callback){
-		var sql = "SELECT username, password FROM users WHERE username='" + user.username + "' AND type=0";
+		var sql = "SELECT id, username, password FROM users WHERE username='" + user.username + "' AND type=0";
 		database.getResult(sql, function(result){
 			if(result.length > 0)
 			{
 				var hash = result[0].password.toString();
-
 				bcrypt.compare(user.password, hash, function(error, response) {
 				    if(response === true){
-							callback(true);
+							//request.session.loggedUserid = result[0].id;
+							callback([true, result[0].id]);
 						}else{
 							callback(false);
 						}

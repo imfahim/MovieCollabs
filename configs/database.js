@@ -30,6 +30,37 @@ module.exports = {
 		});
 	},
 
+  getResults: function(sql, params, callback){
+			if(params == null)
+			{
+				connection.query(sql, function (error, result) {
+					if(error)
+					{
+						console.log(error.stack);
+						callback([]);
+					}
+					else
+					{
+						callback(result);
+					}
+				});
+			}
+			else
+			{
+				connection.query(sql, params, function (error, result) {
+					if(error)
+					{
+						console.log(error.stack);
+						callback([]);
+					}
+					else
+					{
+						callback(result);
+					}
+				});
+			}
+	},
+
 	execute: function(sql, callback){
     connection.query(sql, function (error, result) {
 			if(error)
@@ -42,5 +73,20 @@ module.exports = {
 				callback(true);
 			}
 		});
+	},
+  executeGetId: function(sql, callback){
+
+			connection.query(sql, function (error, result) {
+				if(error)
+				{
+					console.log(error.stack);
+					callback(-1);
+				}
+				else
+				{
+					callback(result.insertId);
+				}
+			});
+
 	}
 };

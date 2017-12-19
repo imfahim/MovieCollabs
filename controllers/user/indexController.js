@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/', (request, response, next) => {
 	if(request.session.loggedUsername == null)
 	{
-		request.flash('fail', 'You need to login first !', '/login');
+		request.flash('fail', 'You need to login first !', '/');
 	}
 	else
 	{
@@ -15,7 +15,7 @@ router.get('/', (request, response, next) => {
 });
 
 router.get('/', (request, response, next) => {
-	response.render('user/index', { username: request.session.loggedUsername });
+	response.render('user/index', { id: request.session.loggedId, username: request.session.loggedUsername });
 });
 
 module.exports = router;
