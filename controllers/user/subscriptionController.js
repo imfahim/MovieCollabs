@@ -1,5 +1,6 @@
 // DECLARATION
 const express = require('express');
+const expressLayouts =require('express-ejs-layouts');
 const moment = require('moment');
 
 const router = express.Router();
@@ -18,7 +19,7 @@ router.get('/', (request, response, next) => {
       var now = moment(new Date());
       var end = moment(valid.expire_date);
       var d = end.diff(now,'d');
-      var diff = moment.langData().relativeTime(d, false, d == 1 ? 'd' : 'dd');
+      var diff = moment.localeData().relativeTime(d, false, d == 1 ? 'd' : 'dd');
       var data={
         tranList:list,
         subscription: valid,

@@ -1,7 +1,7 @@
 // DECLARATION
 const express = require('express');
 const router = express.Router();
-var app=express();
+
 // MODELS
 const userModel = require.main.require('./models/user');
 
