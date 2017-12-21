@@ -15,7 +15,7 @@ router.get('/', (request, response, next) => {
 });
 
 router.get('/', (request, response, next) => {
-	response.render('user/index', { id: request.session.loggedId, username: request.session.loggedUsername });
+	response.render('user/index', { myid: request.session.loggedId, username: request.session.loggedUsername });
 });
 
 module.exports = router;

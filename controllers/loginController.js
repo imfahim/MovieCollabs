@@ -1,7 +1,7 @@
 // DECLARATION
 const express = require('express');
 const router = express.Router();
-
+var app=express();
 // MODELS
 const userModel = require.main.require('./models/user');
 
@@ -19,7 +19,7 @@ router.post('/', (request, response) => {
 	};
 
 	userModel.validate(user, function(valid){
-		if(valid != null)
+		if(valid != false)
 		{
 			request.session.loggedUsername = request.body.username;
 			request.session.loggedId = valid[1];

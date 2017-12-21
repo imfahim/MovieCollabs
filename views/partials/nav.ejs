@@ -11,9 +11,9 @@
      <li><a href="#">About</a></li>
    </ul>
    <ul class="nav navbar-nav navbar-right">
-     <%if(!locals.id){%>
+     <%if(!locals.session.loggedId){%>
      <li><a href="#" data-toggle="modal" data-target="#basicModal"><span class="glyphicon glyphicon-log-in"></span> Join</a></li><%}%>
-     <%if(locals.id){%>
+     <%if(locals.session.loggedId){%>
        <li><a href="/login/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li><%}%>
    </ul>
  </div>

@@ -38,7 +38,10 @@ app.use(session({
 }));
 
 app.use(flash(app));
-
+app.use(function(req, res, next) {
+  res.locals.session = req.session;
+  next();
+});
 // ROUTES
 app.use('/', index);
 app.use('/register', register);
