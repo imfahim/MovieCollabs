@@ -19,7 +19,7 @@ module.exports = {
 				bcrypt.compare(user.password, hash, function(error, response) {
 				    if(response === true){
 							//request.session.loggedUserid = result[0].id;
-							callback([true, result[0].id]);
+							callback([true, result[0].id],result[0].type);
 						}else{
 							callback(false);
 						}

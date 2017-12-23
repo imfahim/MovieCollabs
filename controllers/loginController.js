@@ -23,6 +23,7 @@ router.post('/', (request, response) => {
 		{
 			request.session.loggedUsername = request.body.username;
 			request.session.loggedId = valid[1];
+			request.session.type=valid[2];
 
 			request.flash('success', 'Successfully Logged In !', '/home');
 

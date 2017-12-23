@@ -8,6 +8,8 @@
      <li><a href="#">Browse</a></li>
      <li><a href="#">Profile</a></li>
      <li><a href="/subscribe">Subscription</a></li>
+     <%if(!locals.session.type==1){%>
+     <li><a href="#">Admin Panel/a></li>    <%}%>
      <li><a href="#">About</a></li>
    </ul>
    <ul class="nav navbar-nav navbar-right">
