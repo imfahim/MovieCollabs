@@ -212,8 +212,9 @@ button:hover {
       width: 22px; }
 
 .btn-primary:hover {
-  background-color: #ff763a;
-  opacity: 1; }
+  color: #fff;
+  background-color: #286090;
+  border-color: #204d74; }
 
 .btn-secondary:hover {
   background-color: #ff5e3a;
@@ -325,7 +326,7 @@ button:hover {
 
 /*------------- #FORMS --------------*/
 label.control-label {
-  color: #888da8; }
+  color: #fff; }
 
 textarea {
   min-height: 132px; }
@@ -334,9 +335,9 @@ textarea {
   padding: 1.3rem 1.1rem .2rem; }
 
 input, .form-control {
-  color: #515365;
+  color: #fff;
   line-height: inherit;
-  font-size: .875rem; }
+  font-size: 15px; }
 
 .label-floating.has-success:after {
   content: '\f00c';
@@ -5178,4 +5179,3 @@ ol ol li {
     width: 100%; }
   .col-4-width {
     width: 100%; } }
-

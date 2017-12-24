@@ -11,7 +11,7 @@ module.exports = {
 		});
 	},
 	validate: function(user, callback){
-		var sql = "SELECT id, username, password FROM users WHERE username='" + user.username + "' AND type=0";
+		var sql = "SELECT id, username, password,type FROM users WHERE username='" + user.username +"'";
 		database.getResult(sql, function(result){
 			if(result.length > 0)
 			{
@@ -19,7 +19,7 @@ module.exports = {
 				bcrypt.compare(user.password, hash, function(error, response) {
 				    if(response === true){
 							//request.session.loggedUserid = result[0].id;
-							callback([true, result[0].id],result[0].type);
+							callback([true, result[0].id,result[0].type]);
 						}else{
 							callback(false);
 						}
