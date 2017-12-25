@@ -2,18 +2,41 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <div class="well well-sm">
-        <h4></h4>
-        <ul>
-          <li>
-
-          </li>
-        </ul>
+      <div class="well well-lg">
+        <div class="row">
+        <div class="col-md-4">
+          <img src="/public/poster/<%= movie.movie_id %>.jpg" alt="Poster" style="height:500px">
+        </div>
+        <div class="col-md-4">
+          <h2><%= movie.title %></h2>
+          <text style="font-style: italic;"><%= movie.plot %></text><br><br><br>
+          <label>Genre:</label>&nbsp;&nbsp;Action, Comedy<br>
+          <label>Cast:</label>&nbsp;&nbsp;<%= movie.cast %><br>
+          <label>Director:</label>&nbsp;&nbsp;<%= movie.director %><br>
+          <label>Release:</label>&nbsp;&nbsp;<%= date %><br>
       </div>
-      <br /><br />
-      <div class="well well-sm">
-        <div class="pull-right">
-          <a href="/movie/play/<%= movie.movie_id %>" class="btn btn-success">Play</a>
+      <div class="col-md-4"><br>
+        <center><label>Rating:</label>&nbsp;
+        <%for(var i=1;i<=movie.rating;i++){%>
+        <span class="glyphicon glyphicon-star" style="color:#FFDF00;"></span><%}%></center><br>
+         <button type="button" class="btn btn-danger btn-block">Watch Later</button>
+         <button type="button" class="btn btn-danger btn-block">Add to My List</button>
+         <a href="/movie/play/<%= movie.movie_id %>" class="btn btn-danger btn-block"><span class="glyphicon glyphicon-play-circle"></span>&nbsp;Play Now</a>
+      </div>
+      </div>
+    </div>
+      <div class="panel panel-default">
+        <div class="panel-heading"><center><h3>Review By Users</h3></center></div>
+        <div class="panel-body">
+          <div class="media">
+            <div class="media-left">
+              <img src="/public/img_avatar1.png" class="media-object" style="width:60px">
+            </div>
+            <div class="media-body">
+              <h4 class="media-heading">John Doe</h4>
+              <p>Lorem ipsum...</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>

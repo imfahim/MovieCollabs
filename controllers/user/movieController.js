@@ -1,5 +1,6 @@
 // DECLARATION
 const express = require('express');
+const moment = require('moment');
 const router = express.Router();
 
 // MODELS
@@ -20,7 +21,8 @@ router.get('/', (request, response, next) => {
 router.get('/:id', (request, response, next) => {
   var movie_id = request.params.id;
   moviesModel.getMovieById(movie_id, (result) => {
-    response.render('user/movies/movie', { movie: result });
+		var ex=moment(result.release_date).format("Do MMMM, YYYY");
+    response.render('user/movies/movie', { movie: result,date:ex });
   });
 });
 
