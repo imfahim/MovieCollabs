@@ -9,5 +9,17 @@ module.exports = {
 			callback(flag);
 		});
   },
+  getMovies: (callback) => {
+    var sql = "SELECT movie_id, title FROM movies";
+    database.getResult(sql, (result) => {
+      callback(result);
+    });
+  },
+  getMovieById: (movie_id, callback) => {
+    var sql = "SELECT * FROM movies WHERE movie_id = ?";
+    database.getResults(sql, [movie_id], function(result){
+			callback(result[0]);
+		});
+  },
 
 };

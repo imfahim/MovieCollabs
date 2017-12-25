@@ -1,6 +1,7 @@
 // DECLARATION
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 const flash = require('express-flash-notification');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
@@ -25,11 +26,13 @@ const userManager = require('./controllers/user/indexController');
 const adminManager = require('./controllers/admin/adminController');
 const subscription = require('./controllers/user/subscriptionController');
 const chatManager = require('./controllers/user/chatController');
+const movieManager = require('./controllers/user/movieController');
 
 // CONFIGURATION
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
 app.set('layout','layout');
+app.set("layout extractScripts", true);
 
 //-----------------------------------------------------------------------------
 // Configure web sockets.
@@ -47,7 +50,7 @@ io.sockets.on("connection", function(socket) {
 
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(cookieParser());
-app.use(express.static('public'));
+app.use('/public', express.static('public'));
 app.use(session({
   secret: '2446B86ACE2FA6A57D95172AB2B66',
   saveUninitialized: false,
@@ -68,6 +71,7 @@ app.use('/login', login);
 // For Users
 app.use('/home', userManager);
 app.use('/subscribe', subscription);
+app.use('/movie', movieManager);
 
 // For Admins
 app.use('/admin', adminManager);

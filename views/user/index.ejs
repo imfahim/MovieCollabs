@@ -1,3 +1,11 @@
+<!-- http://expressjs.com/en/api.html -->
+<!--http://idangero.us/swiper/get-started/#.WA-pHaNR6Rs -->
+<!--http://idangero.us/swiper/demos/ -->
+<!--https://github.com/nolimits4web/Swiper/blob/master/demos/210-infinite-loop-with-slides-per-group.html -->
+<!-- -->
+<!-- -->
+
+
 <%- contentFor('body') %>
 
 <%- include('../partials/sidebar-right') %>
@@ -64,7 +72,19 @@
   <div class="panel panel-default">
     <div class="panel-heading">Latest Movies</div>
     <div class="panel-body">
-      list of new uploaded movies
+      <marquee>Hello</marquee>
+      <h4>With Ajax Jquery</h4>
+      <div id="movies-list"></div>
+      <br />
+      <br />
+      <h4>With normal db</h4>
+      <ul>
+        <% movies.forEach((movie) => { %>
+          <li>
+            <a href="/movie/<%= movie.movie_id %>"><span class="glyphicon glyphicon-film"></span> <%= movie.title %></a>
+          </li>
+        <% }); %>
+      </ul>
     </div>
   </div>
   <div class="panel panel-default">
@@ -79,3 +99,22 @@
   <h4>Logged In type : <strong><%= locals.session.type %></strong></h4>
   <br />
 </div>
+
+<script>
+
+function getMoviesList(){
+  $('#movies-list').html('');
+  $.getJSON( "http://localhost:3000/home/api/movies/list", function( data ) {
+    var items = [];
+    $.each( data, function(key) {
+      items.push( "<li><a href='" + "/movie/" + data[key].movie_id + "'><span class='glyphicon glyphicon-film'></span> " + data[key].title + "</a></li>");
+    });
+
+    $( "<ul/>", {
+      html: items.join( "" )
+    }).appendTo( "#movies-list" );
+  });
+}
+
+setInterval(getMoviesList, 100);
+</script>

@@ -1,0 +1,33 @@
+<%- contentFor('body') %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="well well-sm">
+        <h4></h4>
+        <ul>
+          <li>
+
+          </li>
+        </ul>
+      </div>
+      <br /><br />
+      <div class="panel panel-default">
+        <video id="my-video" class="video-js" controls preload="auto" width="640" height="264"
+          poster="/public/videos/poster.jpg" data-setup="{}">
+          <!-- Documentation - http://videojs.com/getting-started/#build-build
+          second: https://github.com/videojs/video.js
+          third: https://www.npmjs.com/package/video.js/
+          forth: http://docs.videojs.com/
+        -->
+            <!--<source src="/public/videos/SpaceShooter-GamePlay.mp4" type='video/mp4'>-->
+            <source src="/public/videos/gandi.mp4" type='video/mp4'>
+            <p class="vjs-no-js">
+              To view this video please enable JavaScript, and consider upgrading to a web browser that
+              <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+            </p>
+          </video>
+      </div>
+    </div>
+  </div>
+</div>
