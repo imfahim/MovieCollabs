@@ -6,8 +6,6 @@ const router = express.Router();
 
 const { check, validationResult } = require('express-validator/check');
 const { matchedData, sanitize } = require('express-validator/filter');
-var bcrypt = require('bcrypt');
-const saltRounds = 10;
 
 //models
 const movieModel = require.main.require('./models/movies');
@@ -42,13 +40,15 @@ router.post('/',[
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.mapped() });
   }else{
-    console.log(req.body.title);
-    console.log(req.body.date);
+
+    //console.log((req.body.genre != null) ? JSON.stringify(req.body.genre) : 'nothing');
+
     var new_movie = {
       title: req.body.title,
       director: req.body.director,
       cast: req.body.cast,
       plot:req.body.plot,
+			genre: (req.body.genre != null) ? JSON.stringify(req.body.genre) : '',
       date:req.body.date
     };
     movieModel.insertGetid(new_movie,function(valid){
@@ -59,25 +59,23 @@ router.post('/',[
         // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
         let sampleFile = req.files.sampleFile;
         let sampleFile2 = req.files.sampleFile2;
-        console.log(sampleFile.name);
-        console.log(sampleFile.mimetype);
 
         if(sampleFile.mimetype=="image/jpeg" && sampleFile2.mimetype=="video/mp4"){
-        sampleFile.mv('./public/poster/' + valid+'.jpg', function(err) {
-          if (err)
-            return res.status(500).send(err);
+	        sampleFile.mv('./public/poster/' + valid+'.jpg', function(err) {
+	          if (err)
+	            return res.status(500).send(err);
 
-            sampleFile2.mv('./public/movie/' + valid+'.mp4', function(err) {
-              if (err)
-                return res.status(500).send(err);
+	            sampleFile2.mv('./public/movies/' + valid+'.mp4', function(err) {
+	              if (err)
+	                return res.status(500).send(err);
 
-              res.flash('success','File uploaded!','/admin');
-            });;
-        });
+	              req.flash('success','File uploaded!','/admin');
+	            });
+	        });
 
-      }
+      	}
         else{
-          res.flash('fail','Wrong type of file!','/admin');
+          req.flash('fail','Wrong type of file!','/admin');
         }
       }
       else
@@ -86,6 +84,7 @@ router.post('/',[
       }
 
     })
+
   }
 });
 
