@@ -13,6 +13,16 @@ const SubscribeModel = require.main.require('./models/subscriber');
 const TransactionModel = require.main.require('./models/transaction');
 
 // ROUTES
+router.all('*', (request, response, next) => {
+	if(request.session.type == null)
+	{
+		request.flash('fail', 'You need to login first !', '/');
+	}
+	else
+	{
+		next();
+	}
+});
 router.get('/', (request, response, next) => {
   SubscribeModel.getbyuser(request.session.loggedId,function(valid){
     TransactionModel.getbyuser(request.session.loggedId,function(list){

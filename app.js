@@ -27,6 +27,7 @@ const adminManager = require('./controllers/admin/adminController');
 const subscription = require('./controllers/user/subscriptionController');
 const chatManager = require('./controllers/user/chatController');
 const movieManager = require('./controllers/user/movieController');
+const profileManager = require('./controllers/user/profileController');
 
 // CONFIGURATION
 app.set('view engine', 'ejs');
@@ -71,7 +72,9 @@ app.use('/login', login);
 // For Users
 app.use('/home', userManager);
 app.use('/subscribe', subscription);
+app.use('/profile', profileManager);
 app.use('/movie', movieManager);
+
 
 // For Admins
 app.use('/admin', adminManager);

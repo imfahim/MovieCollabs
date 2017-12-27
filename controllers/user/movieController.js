@@ -5,9 +5,11 @@ const router = express.Router();
 
 // MODELS
 const moviesModel = require.main.require('./models/movies');
+const SubscribeModel = require.main.require('./models/subscriber');
+const my_listModel = require.main.require('./models/my_list');
 
 // ROUTES
-router.get('/', (request, response, next) => {
+router.all('*', (request, response, next) => {
 	if(request.session.loggedUsername == null)
 	{
 		request.flash('fail', 'You need to login first !', '/');
@@ -22,14 +24,100 @@ router.get('/:id', (request, response, next) => {
   var movie_id = request.params.id;
   moviesModel.getMovieById(movie_id, (result) => {
 		var ex=moment(result.release_date).format("Do MMMM, YYYY");
-    response.render('user/movies/movie', { movie: result,date:ex });
+		var data={
+			user_id:request.session.loggedId,
+			movie_id:movie_id
+		};
+		my_listModel.getByIds(data,(flag)=>{
+			var check=false;
+			for(var i=0;i<flag.length;i++){
+				if(flag[i].movie_id==movie_id){
+					check=true;
+				}
+			}
+				response.render('user/movies/movie', { movie: result,date:ex ,my_list:check});
+
+		});
+
   });
 });
 
 router.get('/play/:id', (request, response, next) => {
   var movie_id = request.params.id;
   // Checking then redirect to the Play Page
-  response.render('user/movies/play', { movie_id: movie_id });
+	SubscribeModel.getbyuser(request.session.loggedId,(result)=>{
+		if(result.status!='on'){
+			var data={
+				user_id:request.session.loggedId,
+				movie_id:movie_id
+			};
+			my_listModel.getByIds(data,(flag)=>{
+				var check=false;
+				for(var i=0;i<flag.length;i++){
+					if(flag[i].movie_id==movie_id){
+						check=true;
+					}
+				}
+				if(check){
+					response.render('user/movies/play', { movie_id: movie_id });
+				}
+				else{
+					request.flash('fail', 'Need Subscription!', '/movie/'+movie_id);
+				}
+				});
+		}
+		else{
+			response.render('user/movies/play', { movie_id: movie_id });
+		}
+	});
+
 });
 
+router.get('/my_list/add/:id', (request, response, next) => {
+  var movie_id = request.params.id;
+	var data={
+		user_id:request.session.loggedId,
+		movie_id:movie_id
+	};
+	my_listModel.getByIds(data,(flag)=>{
+		var check=false;
+		for(var i=0;i<flag.length;i++){
+			if(flag[i].movie_id==movie_id){
+				check=true;
+			}
+		}
+		if(check){
+			request.flash('fail', 'Already Listed!', '/movie/'+movie_id);
+		}
+		else if(flag.length==10){
+			request.flash('fail', 'My List is already FULL!', '/movie/'+movie_id)
+		}
+		else{
+			my_listModel.insert(data, (result) => {
+				if(result){
+		    request.flash('Success', 'Added to My List!', '/movie/'+movie_id);
+				}
+				else{
+					request.flash('fail', 'DB Error!', '/movie/'+movie_id);
+				}
+		  });
+		}
+	});
+});
+router.get('/my_list/remove/:id', (request, response, next) => {
+	var movie_id = request.params.id;
+	var data={
+		user_id:request.session.loggedId,
+		movie_id:movie_id
+	};
+	my_listModel.delete(data,(result)=>{
+		if(result){
+			request.flash('Success', 'Removed from My List!', '/movie/'+movie_id);
+		}
+		else{
+			request.flash('fail', 'DB Error!', '/movie/'+movie_id);
+		}
+	})
+
+	});
 module.exports = router;
