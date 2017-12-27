@@ -1,38 +1,60 @@
 <%- contentFor('body') %>
 <div class="container">
   <div class="row">
-    <div class="col-md-4">
+      <div class="col-md-4">
+        <div class="panel panel-default">
+
+          <div class="panel-heading"><center>My List</center></div>
+          <div class="panel-body scroll">
+            <table class="table table-striped">
+              <tbody>
+                <% for(var i=0;i< mylist.length;i++) { %>
+                  <tr>
+                    <td><%=i+1%>.</td>
+                    <td><img src="/public/poster/<%= mylist[i].movie_id %>.jpg" alt="Poster" style="height:50px"></td>
+                    <td><a href="/movie/<%= mylist[i].movie_id %>"><%= mylist[i].title %></a>
+                    <p style="font-size:11px;"><%-JSON.parse(mylist[i].genre) %></p></td>
+                  </tr>
+                  <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    <div class="col-md-8">
       <div class="panel panel-default">
-        <div class="panel-heading">My List</div>
+        <div class="panel-heading"><center>Profile</center></div>
         <div class="panel-body">
-          <ul>
-            <% mylist.forEach((movie) => { %>
-              <li>
-                <a href="/movie/<%= movie.movie_id %>"><span class="glyphicon glyphicon-film"></span> <%= movie.title %></a>
-              </li>
-            <% }); %>
-          </ul>
+
+
         </div>
       </div>
     </div>
     <div class="col-md-4">
       <div class="panel panel-default">
-        <div class="panel-heading">Watch List</div>
-        <div class="panel-body">
-          <ul>
-            <% watchlist.forEach((movie) => { %>
-              <li>
-                <a href="/movie/<%= movie.movie_id %>"><span class="glyphicon glyphicon-film"></span> <%= movie.title %></a>
-              </li>
-            <% }); %>
-          </ul>
+        <div class="panel-heading"><center>Watch List</center></div>
+        <div class="panel-body scroll">
+          <table class="table table-striped">
+            <tbody>
+              <% for(var i=0;i< watchlist.length;i++) { %>
+                <tr>
+                  <td><%=i+1%>.</td>
+                  <td><img src="/public/poster/<%= watchlist[i].movie_id %>.jpg" alt="Poster" style="height:50px"></td>
+                  <td><a href="/movie/<%= watchlist[i].movie_id %>"><%= watchlist[i].title %></a></td>
+                </tr>
+                <% } %>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
-</div>
-
-
-
-
 
 </div>
+</div>
+<style>
+.scroll{
+    height: 370px;
+    overflow-y: auto;
+}
+</style>
