@@ -19,11 +19,18 @@
         <center><label>Rating:</label>&nbsp;
         <%for(var i=1;i<=movie.rating;i++){%>
         <span class="glyphicon glyphicon-star" style="color:#FFDF00;"></span><%}%></center><br>
-         <button type="button" class="btn btn-danger btn-block">Watch Later</button>
-         <%if(my_list){%>
-           <a href="/movie/my_list/remove/<%= movie.movie_id %>" class="btn btn-success btn-block"><span class="glyphicon glyphicon-ok"></span>&nbsp;In My List</a>
-           <%}else{%>
-         <a href="/movie/my_list/add/<%= movie.movie_id %>" class="btn btn-danger btn-block">Add to My List</a><%}%>
+
+          <% if (watchlist) { %>
+            <a href="/movie/watchlist/remove/<%= movie.movie_id %>" class="btn btn-success btn-block"><span class="glyphicon glyphicon-ok"></span>&nbsp;Watch Listed</a>
+          <% } else { %>
+            <a href="/movie/watchlist/add/<%= movie.movie_id %>" class="btn btn-danger btn-block">Watch Later</a>
+          <% } %>
+          
+          <% if (my_list) { %>
+            <a href="/movie/my_list/remove/<%= movie.movie_id %>" class="btn btn-success btn-block"><span class="glyphicon glyphicon-ok"></span>&nbsp;In My List</a>
+          <% } else { %>
+            <a href="/movie/my_list/add/<%= movie.movie_id %>" class="btn btn-danger btn-block">Add to My List</a>
+          <% } %>
 
          <a href="/movie/play/<%= movie.movie_id %>" class="btn btn-danger btn-block"><span class="glyphicon glyphicon-play-circle"></span>&nbsp;Play Now</a>
       </div>

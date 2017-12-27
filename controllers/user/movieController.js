@@ -7,6 +7,7 @@ const router = express.Router();
 const moviesModel = require.main.require('./models/movies');
 const SubscribeModel = require.main.require('./models/subscriber');
 const my_listModel = require.main.require('./models/my_list');
+const watch_listModel = require.main.require('./models/watchlist');
 
 // ROUTES
 router.all('*', (request, response, next) => {
@@ -28,14 +29,23 @@ router.get('/:id', (request, response, next) => {
 			user_id:request.session.loggedId,
 			movie_id:movie_id
 		};
+		var check=false;
 		my_listModel.getByIds(data,(flag)=>{
-			var check=false;
+
 			for(var i=0;i<flag.length;i++){
 				if(flag[i].movie_id==movie_id){
 					check=true;
 				}
 			}
-				response.render('user/movies/movie', { movie: result,date:ex ,my_list:check});
+			watch_listModel.getByIds(data,(flag)=>{
+				var watchlist_check=false;
+				for(var i=0;i<flag.length;i++){
+					if(flag[i].movie_id==movie_id){
+						watchlist_check=true;
+					}
+				}
+				response.render('user/movies/movie', { movie: result,date:ex ,my_list:check, watchlist:watchlist_check});
+			});
 
 		});
 
@@ -105,19 +115,63 @@ router.get('/my_list/add/:id', (request, response, next) => {
 	});
 });
 router.get('/my_list/remove/:id', (request, response, next) => {
-	var movie_id = request.params.id;
+		var movie_id = request.params.id;
+		var data={
+			user_id:request.session.loggedId,
+			movie_id:movie_id
+		};
+		my_listModel.delete(data,(result)=>{
+			if(result){
+				request.flash('Success', 'Removed from My List!', '/movie/'+movie_id);
+			}
+			else{
+				request.flash('fail', 'DB Error!', '/movie/'+movie_id);
+			}
+		})
+});
+
+// Watchlist
+router.get('/watchlist/add/:id', (request, response, next) => {
+  var movie_id = request.params.id;
 	var data={
 		user_id:request.session.loggedId,
 		movie_id:movie_id
 	};
-	my_listModel.delete(data,(result)=>{
-		if(result){
-			request.flash('Success', 'Removed from My List!', '/movie/'+movie_id);
+	watch_listModel.getByIds(data,(flag)=>{
+		var check=false;
+		for(var i=0;i<flag.length;i++){
+			if(flag[i].movie_id==movie_id){
+				check=true;
+			}
+		}
+		if(check){
+			request.flash('fail', 'Already Listed!', '/movie/'+movie_id);
 		}
 		else{
-			request.flash('fail', 'DB Error!', '/movie/'+movie_id);
+			watch_listModel.insert(data, (result) => {
+				if(result){
+		    	request.flash('Success', 'Added to Watch List!', '/movie/'+movie_id);
+				}
+				else{
+					request.flash('fail', 'DB Error!', '/movie/'+movie_id);
+				}
+		  });
 		}
-	})
-
 	});
+});
+router.get('/watchlist/remove/:id', (request, response, next) => {
+		var movie_id = request.params.id;
+		var data={
+			user_id:request.session.loggedId,
+			movie_id:movie_id
+		};
+		watch_listModel.delete(data,(result)=>{
+			if(result){
+				request.flash('Success', 'Removed from Watch List!', '/movie/'+movie_id);
+			}
+			else{
+				request.flash('fail', 'DB Error!', '/movie/'+movie_id);
+			}
+		})
+});
 module.exports = router;
