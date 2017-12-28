@@ -8,6 +8,9 @@ const moviesModel = require.main.require('./models/movies');
 const SubscribeModel = require.main.require('./models/subscriber');
 const my_listModel = require.main.require('./models/my_list');
 const watch_listModel = require.main.require('./models/watchlist');
+const reviewModel = require.main.require('./models/review');
+const likeModel = require.main.require('./models/like');
+
 
 // ROUTES
 router.all('*', (request, response, next) => {
@@ -44,11 +47,12 @@ router.get('/:id', (request, response, next) => {
 						watchlist_check=true;
 					}
 				}
-				response.render('user/movies/movie', { movie: result,date:ex ,my_list:check, watchlist:watchlist_check});
+				reviewModel.getReviewsByMovie(movie_id, (reviews_result) => {
+					console.log(reviews_result);
+					response.render('user/movies/movie', { movie: result,date:ex ,my_list:check, watchlist:watchlist_check, reviews: reviews_result });
+				});
 			});
-
 		});
-
   });
 });
 
@@ -173,5 +177,34 @@ router.get('/watchlist/remove/:id', (request, response, next) => {
 				request.flash('fail', 'DB Error!', '/movie/'+movie_id);
 			}
 		})
+});
+
+// Review
+router.post('/review/add', (request, response, next) => {
+	var data = {
+		user_id: request.session.loggedId,
+		movie_id: request.body.movie_id,
+		text_review: request.body.text_review
+	};
+	reviewModel.insert(data, (flag) => {
+		if(flag){
+			if(request.body.likeness == 1){
+				likeModel.addLike(data.movie_id, (like_flag) => {
+					if(like_flag){
+						request.flash('Success', 'Review Added !', '/movie/' + data.movie_id);
+					}
+				});
+			}
+			if(request.body.likeness == 0){
+				likeModel.addDislike(data.movie_id, (like_flag) => {
+					if(like_flag){
+						request.flash('Success', 'Review Added !', '/movie/' + data.movie_id);
+					}
+				});
+			}
+		}else{
+			request.flash('fail', 'DB Error !', '/movie/' + data.movie_id);
+		}
+	});
 });
 module.exports = router;
