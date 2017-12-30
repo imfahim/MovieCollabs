@@ -25,6 +25,7 @@ const login = require('./controllers/loginController');
 const userManager = require('./controllers/user/indexController');
 const adminManager = require('./controllers/admin/adminController');
 const subscription = require('./controllers/user/subscriptionController');
+const partyChatManager = require('./controllers/user/partyChatController');
 const chatManager = require('./controllers/user/chatController');
 const movieManager = require('./controllers/user/movieController');
 const profileManager = require('./controllers/user/profileController');
@@ -34,21 +35,10 @@ app.set('view engine', 'ejs');
 app.use(expressLayouts);
 app.set('layout','layout');
 app.set("layout extractScripts", true);
-
-//-----------------------------------------------------------------------------
-// Configure web sockets.
-//-----------------------------------------------------------------------------
-io.sockets.on("connection", function(socket) {
-
-    socket.on("send message", function(message) {
-        io.sockets.emit("new message", message);
-    });
-
-});
+app.set('io', io);
 
 
 // MIDDLEWARES
-
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(cookieParser());
 app.use('/public', express.static('public'));
@@ -80,6 +70,14 @@ app.use('/movie', movieManager);
 app.use('/admin', adminManager);
 
 // Chatting test
+console.log('eikhane ashse');
+io.on('connection', (socket) => {
+    console.log('vitore ashse');
+    partyChatManager.respond(io, socket);
+  });
+
+//app.set('chat', partyChat);
+  //console.log(partyChat);
 app.use('/chat', chatManager);
 
 
