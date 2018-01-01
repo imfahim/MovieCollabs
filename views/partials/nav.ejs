@@ -6,9 +6,10 @@
    <ul class="nav navbar-nav" style="padding-left: 30px;">
      <li class="active"><a href="/home">Home</a></li>
      <li><a href="#">Browse</a></li>
+     <%if(locals.session.loggedId){%>
      <li><a href="/profile">Profile</a></li>
      <li><a href="/subscribe">Subscription</a></li>
-     <%if(locals.session.type==1){%>
+     <%}if(locals.session.type==1){%>
      <li><a href="/admin">Admin Panel</a></li><%}%>
      <li><a href="#">About</a></li>
    </ul>

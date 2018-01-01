@@ -1,0 +1,108 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="well well-lg">
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+              <%for(var i=0;i< covers.length;i++){%>
+              <div class="swiper-slide"><center><a href="/movie/<%= covers[i].movie_id %>"><%= covers[i].title %>(<%=moment(covers[i].release_date).format('YYYY')%>)</a><br>
+              <img src="/public/covers/<%= covers[i].movie_id %>.jpg" alt="Cover" style="width:550px"><br>
+              <a href="/admin/cover/remove/<%=covers[i].movie_id%>" class="btn btn-danger btn-xs">Remove</a>
+
+              </center>
+              </div>
+              <%}%>
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+            <!-- Add Arrows -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+        </div>
+    </div>
+    <form ref='uploadForm' id='uploadForm' action='/admin/charts' method='post' encType="multipart/form-data">
+      <div class="form-group">
+         <label for="sel1">Select Movie:</label>
+         <select class="form-control" id="sel1" name="movie_id">
+           <%for(var i=0;i< movies.length;i++){%>
+           <option value='<%=movies[i].movie_id%>'><%=movies[i].title%>(<%=moment(movies[i].release_date).format('YYYY')%>)</option>
+           <%}%>
+         </select>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2">Cover:</label>
+              <input type="file" name="sampleFile" />
+          </div>
+          <input type='submit' class="btn btn-primary" value='Upload!' />
+    </form>
+    </div>
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for title..">
+        </div>
+        <div class="panel-body scroll">
+      <table class="table table-striped" id="myTable">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th></th>
+        <th>Title</th>
+        <th>Year</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%for(var i=0;i< movies.length;i++){%>
+        <tr>
+          <td><%=i+1%></td>
+          <td><img src="/public/poster/<%= movies[i].movie_id %>.jpg" alt="Poster" style="height:50px"></td>
+          <td><a href="/movie/<%= movies[i].movie_id %>"><%= movies[i].title %></a></td>
+          <td><%=moment(movies[i].release_date).format('YYYY')%></td>
+        </tr><%}%>
+    </tbody>
+    </table>
+      </div>
+    </div>
+    </div>
+  </div>
+</div>
+<script>
+function myFunction() {
+  // Declare variables
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }
+  }
+}
+
+var swiper = new Swiper('.swiper-container', {
+  spaceBetween: 0,
+  centeredSlides: true,
+  autoplay: {
+    delay: 2500,
+    disableOnInteraction: false,
+  },
+  pagination: {
+    el: '.swiper-pagination',
+    clickable: true,
+  },
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
+});
+
+  </script>

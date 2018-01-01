@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">Users</div>
+      <div class="panel-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>bKash ID</th>
+              <th>Month</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% for(var i = 0; i < users.length; i++) {%>
+                <tr>
+                  <td><%= users[i].bkash_id %></td>
+                  <td><%= moment(users[i].date).format( 'MMMM,YYYY') %></td>
+                  <td>$<%= users[i].amount %></td>
+                </tr>
+                <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

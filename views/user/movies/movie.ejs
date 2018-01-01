@@ -32,7 +32,27 @@
             <a href="/movie/my_list/add/<%= movie.movie_id %>" class="btn btn-danger btn-block">Add to My List</a>
           <% } %>
 
+
          <a href="/movie/play/<%= movie.movie_id %>" class="btn btn-danger btn-block"><span class="glyphicon glyphicon-play-circle"></span>&nbsp;Play Now</a>
+         <div class="row">
+         <div class="col-md-6">
+
+             <center><%if(like=='liked'){%>
+               <button class="like" onclick="window.location.href='/movie/like/add/<%= movie.movie_id %>'" disabled><i class="fa fa-thumbs-o-up" aria-hidden="true"></i></button><br>[<%=totallike%>]<br>(Liked)</center>
+              <%}else{%>
+                <button class="like" onclick="window.location.href='/movie/like/add/<%= movie.movie_id %>'"><i class="fa fa-thumbs-o-up" aria-hidden="true"></i></button><br>[<%=totallike%>]</center>
+              <%}%>
+            </div>
+            <div class="col-md-6">
+                <center><%if(like=='disliked'){%>
+                  <button class="dislike" onclick="window.location.href='/movie/dislike/add/<%= movie.movie_id %>'" disabled><i class="fa fa-thumbs-o-down" aria-hidden="true"></i></button><br>[<%=totaldislike%>]<br>(Disliked)</center>
+                 <%}else{%>
+                   <button class="dislike" onclick="window.location.href='/movie/dislike/add/<%= movie.movie_id %>'"><i class="fa fa-thumbs-o-down" aria-hidden="true"></i></button><br>[<%=totaldislike%>]</center>
+                 <%}%><br>
+
+             </div>
+       </div>
+
       </div>
       </div>
     </div>
@@ -54,19 +74,6 @@
                   <div class="pull-right">
                     <input type="submit" class="btn btn-success" value="Publish" />
                   </div>
-
-                  <button class="dislike">
-                  	<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
-                  </button>
-
-                  <button class="like">
-                  	<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>
-                  </button>
-                  <br />
-
-                  <input type="radio" name="likeness" value="1" checked> Like<br>
-                  <input type="radio" name="likeness" value="0"> Dislike<br>
-
                 </p>
               </div>
             </div>
@@ -79,11 +86,18 @@
                   <img src="/public/img_avatar1.png" class="media-object" style="width:60px">
                 </div>
                 <div class="media-body">
-                  <h4 class="media-heading"><%= review.username %></h4>
+                  <h4 class="media-heading">
+                    <%if(locals.session.loggedUsername==review.username){%>
+                    <a href="/profile/profileOf/<%=review.id%>" style="color:#E50914"><%= review.username %></a>
+                    <%}else{%>
+                      <a href="/profile/profileOf/<%=review.id%>" style="color:#E4A53B"><%= review.username %></a>
+                      <%}%>
+
+                    <text style="font-size:13px">(<%= moment(review.created_at).format('MMMM Do YYYY, h:mm:ss a') %>)</text>
+                  </h4>
+
                   <p><%= review.text_review %></p>
-                  <div class="pull-right">
-                    <%= review.created_at %>
-                  </div>
+
                 </div>
               </div>
             <% }); %>

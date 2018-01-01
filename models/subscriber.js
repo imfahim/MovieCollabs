@@ -10,7 +10,7 @@ module.exports = {
 		});
   },
   subscribe: function(subs,callback){
-    var sql = "UPDATE subscribers SET status = 'on' , expire_date ='"+subs.expire+"' where user_id='"+subs.id+"'";
+    var sql = "UPDATE subscribers SET status = 'paid' , expire_date ='"+subs.expire+"' where user_id='"+subs.id+"'";
 		database.execute(sql, function(flag){
 			callback(flag);
 		});

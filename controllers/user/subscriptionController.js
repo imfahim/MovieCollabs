@@ -36,6 +36,7 @@ router.get('/', (request, response, next) => {
         moment: moment,
         expire: diff
       };
+			request.session.subscribe=valid.status;
       response.render('user/subscription',data);
     })
 
@@ -59,7 +60,6 @@ router.post('/',[
     id:request.session.loggedId,
     expire:ex,
   };
-  console.log(ex);
   SubscribeModel.subscribe(subs,function(valid){
       if(valid){
         var values={
@@ -69,15 +69,16 @@ router.post('/',[
         };
         TransactionModel.insert(values,function(flag){
           if(flag){
-            response.redirect('/subscribe')
+						request.session.subscribe="on";
+						request.flash('Success', 'successfully sbscribed!', '/subscribe');
           }
           else{
-            response.send('Error insertine data')
+						request.flash('fail', 'Error insertine data', '/subscribe');
           }
         })
       }
       else{
-        response.send('Error insertine data')
+        request.flash('fail', 'Error insertine data', '/subscribe');
       }
   })
 }

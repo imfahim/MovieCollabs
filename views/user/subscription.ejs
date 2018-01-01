@@ -10,6 +10,8 @@
         <text style="color:yellow">Not Subscribed</text><br><%}%>
       <%if(subscription.status=='expired'){%>
         <text style="color:red">Expired</text>( <%= subscription.movie_count %>Movies)<br><%}%>
+      <%if(subscription.status=='paid'){%>
+        <text style="color:yellow">Paid</text><br><%}%>
       <%if(subscription.status=='on'){%>
       <p><%= expire %> remaining</p><%}%>
   </div>
@@ -21,9 +23,9 @@
           <form method="POST">
           <div class="form-group">
              <p style="font-size:12px">bKash $9.99 to 0124762</p>
-             <input type="text" class="form-control" placeholder="TraX-ID" name="bkash" <%if(subscription.status=='on'){%>disabled<%}%>>
+             <input type="text" class="form-control" placeholder="TraX-ID" name="bkash" <%if(subscription.status=='on' || subscription.status=='paid'){%>disabled<%}%>>
           </div>
-          <button type="submit" class="btn btn-success pull-right" <%if(subscription.status=='on'){%>disabled<%}%>>Submit</button>
+          <button type="submit" class="btn btn-success pull-right" <%if(subscription.status=='on' || subscription.status=='paid'){%>disabled<%}%>>Submit</button>
         </form>
         </div>
       </div>

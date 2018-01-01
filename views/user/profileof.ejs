@@ -1,0 +1,34 @@
+<div class="container">
+  <label>Username:</label><%=info.username%><br>
+  <label>Userid:</label><%=info.id%><br>
+  <label>Email:</label><%=info.email%><br>
+  <%if(status==null){%>
+<form method="POST" action="/buddy">
+  <input type="hidden" name="user_id" value="<%=user_id%>" />
+  <input type="submit" class="btn btn-success" value="Add Buddy"/>
+</form><%}%>
+<%if(status=='sent'){%>
+  <form method="POST" action="/buddy/cancel">
+    <input type="hidden" name="buddy_id" value="<%=buddyid%>" />
+    <input type="hidden" name="user_id" value="<%=user_id%>" />
+    <input type="submit" class="btn btn-danger" value="Cancel Request"/>
+  </form><%}%>
+  <%if(status=='confirm'){%>
+    <form method="POST" action="/buddy/accept">
+      <input type="hidden" name="buddy_id" value="<%=buddyid%>" />
+      <input type="hidden" name="user_id" value="<%=user_id%>" />
+      <input type="submit" class="btn btn-success" value="Confirm"/>
+    </form>
+    <form method="POST" action="/buddy/cancel">
+      <input type="hidden" name="buddy_id" value="<%=buddyid%>" />
+      <input type="hidden" name="user_id" value="<%=user_id%>" />
+      <input type="submit" class="btn btn-danger" value="Cancel"/>
+    </form>
+    <%}%>
+    <%if(status=='buddy'){%>
+      <form method="POST" action="/buddy/cancel">
+        <input type="hidden" name="buddy_id" value="<%=buddyid%>" />
+        <input type="hidden" name="user_id" value="<%=user_id%>" />
+        <input type="submit" class="btn btn-danger" value="Remove Buddy"/>
+      </form><%}%>
+</div>

@@ -1,9 +1,16 @@
 <%- contentFor('body') %>
 <div class="container">
+  <div class="dropdown pull-right">
+   <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Buddy Requests <span class="badge"><%=reqsts.length%></span>
+   <span class="caret"></span></button>
+   <ul class="dropdown-menu">
+     <% for(var i=0;i< reqsts.length;i++) { %>
+     <li><a href="/profile/profileOf/<%=reqsts[i].id%>"><%=reqsts[i].username%></a></li><%}%>
+   </ul>
+  </div>
   <div class="row">
       <div class="col-md-4">
         <div class="panel panel-default">
-
           <div class="panel-heading"><center>My List</center></div>
           <div class="panel-body scroll">
             <table class="table table-striped">
@@ -52,9 +59,3 @@
 
 </div>
 </div>
-<style>
-.scroll{
-    height: 370px;
-    overflow-y: auto;
-}
-</style>

@@ -29,6 +29,7 @@ const partyChatManager = require('./controllers/user/partyChatController');
 const chatManager = require('./controllers/user/chatController');
 const movieManager = require('./controllers/user/movieController');
 const profileManager = require('./controllers/user/profileController');
+const buddyManager = require('./controllers/user/buddyController');
 
 // CONFIGURATION
 app.set('view engine', 'ejs');
@@ -64,6 +65,7 @@ app.use('/home', userManager);
 app.use('/subscribe', subscription);
 app.use('/profile', profileManager);
 app.use('/movie', movieManager);
+app.use('/buddy', buddyManager);
 
 
 // For Admins

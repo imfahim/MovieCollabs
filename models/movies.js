@@ -8,7 +8,7 @@ module.exports = {
 		});
   },
   getMovies: (callback) => {
-    var sql = "SELECT movie_id, title FROM movies";
+    var sql = "SELECT movie_id, title FROM movies ORDER BY release_date DESC";
     database.getResult(sql, (result) => {
       callback(result);
     });
@@ -18,6 +18,13 @@ module.exports = {
     database.getResults(sql, [movie_id], function(result){
 			callback(result[0]);
 		});
+  },
+  getTopchart:(callback)=> {
+    var sql ="SELECT * FROM movies ORDER BY rating DESC";
+    database.getResult(sql, (result) => {
+      callback(result);
+    });
+
   },
 
 };

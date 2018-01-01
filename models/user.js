@@ -43,5 +43,17 @@ module.exports = {
 				callback(result);
 			}
 		});
-	}
+	},
+	infoByid:function(user_id,callback){
+		var sql = "SELECT id,username,email,created_at,type FROM users WHERE id='"+user_id+"'";
+		database.getResult(sql,function(result){
+			callback(result[0]);
+		});
+	},
+	getAll:function (callback){
+		var sql="SELECT * FROM users INNER JOIN subscribers ON users.id=subscribers.user_id";
+		database.getResult(sql,function(result){
+			callback(result);
+		});
+	},
 };

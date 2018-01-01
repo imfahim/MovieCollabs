@@ -48,8 +48,26 @@ router.get('/:id', (request, response, next) => {
 					}
 				}
 				reviewModel.getReviewsByMovie(movie_id, (reviews_result) => {
-					console.log(reviews_result);
-					response.render('user/movies/movie', { movie: result,date:ex ,my_list:check, watchlist:watchlist_check, reviews: reviews_result });
+					likeModel.getAll(movie_id,(likes)=>{
+						var lk='null';
+						var totallike=0;
+						var totaldislike=0;
+						for(var i=0;i<likes.length;i++){
+							if(likes[i].user_id==request.session.loggedId && likes[i].status=="like"){
+								lk='liked';
+							}
+							if(likes[i].user_id==request.session.loggedId && likes[i].status=="dislike"){
+								lk='disliked';
+							}
+							if(likes[i].status=="like"){
+								totallike++;
+							}
+							else if(likes[i].status=="dislike"){
+								totaldislike++;
+							}
+						}
+						response.render('user/movies/movie', { movie: result,date:ex ,my_list:check, watchlist:watchlist_check, reviews: reviews_result,like:lk,totallike:totallike,totaldislike:totaldislike,moment:moment });
+					});
 				});
 			});
 		});
@@ -188,23 +206,61 @@ router.post('/review/add', (request, response, next) => {
 	};
 	reviewModel.insert(data, (flag) => {
 		if(flag){
-			if(request.body.likeness == 1){
-				likeModel.addLike(data.movie_id, (like_flag) => {
-					if(like_flag){
-						request.flash('Success', 'Review Added !', '/movie/' + data.movie_id);
-					}
-				});
-			}
-			if(request.body.likeness == 0){
-				likeModel.addDislike(data.movie_id, (like_flag) => {
-					if(like_flag){
-						request.flash('Success', 'Review Added !', '/movie/' + data.movie_id);
-					}
-				});
-			}
+			request.flash('Success', 'Review Added !', '/movie/' + data.movie_id);
 		}else{
 			request.flash('fail', 'DB Error !', '/movie/' + data.movie_id);
 		}
 	});
 });
+router.get('/like/add/:id',(request,response,next) =>{
+	var movie_id = request.params.id;
+	var data={
+		user_id:request.session.loggedId,
+		movie_id:movie_id,
+		status:'like'
+	};
+	likeModel.check(data,(result)=>{
+		if(result){
+			likeModel.update(data,(flag)=>{
+				if(flag){
+					request.flash('Success', 'Liked !', '/movie/' + movie_id);
+				}
+			});
+		}
+		else{
+			likeModel.insertStatus(data, (like_flag) => {
+				if(like_flag){
+					request.flash('Success', 'Liked !', '/movie/' + movie_id);
+				}
+			});
+		}
+	});
+});
+
+router.get('/dislike/add/:id',(request,response,next) =>{
+	var movie_id = request.params.id;
+	var data={
+		user_id:request.session.loggedId,
+		movie_id:movie_id,
+		status:'dislike'
+	};
+	likeModel.check(data,(result)=>{
+		if(result){
+			likeModel.update(data,(flag)=>{
+				if(flag){
+					request.flash('Success', 'DisLiked !', '/movie/' + movie_id);
+				}
+			});
+		}
+		else{
+			likeModel.insertStatus(data, (like_flag) => {
+				if(like_flag){
+					request.flash('Success', 'DisLiked !', '/movie/' + movie_id);
+				}
+			});
+		}
+	});
+});
+
+
 module.exports = router;

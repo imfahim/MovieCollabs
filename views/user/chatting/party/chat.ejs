@@ -36,6 +36,7 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
       <script src="/socket.io/socket.io.js"></script>
       <script>
+<<<<<<< Updated upstream
           // getting the id of the room from the url
           //var partyid = Number(window.location.pathname.match(/\/party\/(\d+)$/)[1]);
           alert('ok');
@@ -88,6 +89,26 @@
         		});
         	});
 
+=======
+        $(document).ready(function(){
+
+          var socket = io.connect();
+          var messageForm = $('#send-message');
+          var message = $('#message');
+          var chat = $('#chat');
+
+          messageForm.submit(function(e){
+            e.preventDefault();
+            socket.emit('send message', message.val());
+            message.val('');
+          });
+
+          socket.on('new message', function(message){
+            chat.append(message + '<br />');
+          });
+        });
+        alert('docu ready');
+>>>>>>> Stashed changes
       </script>
     </body>
 </html>
