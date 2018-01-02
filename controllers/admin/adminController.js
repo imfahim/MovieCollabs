@@ -12,6 +12,10 @@ const movieModel = require.main.require('./models/movies');
 const likeModel = require.main.require('./models/like');
 const coversModel = require.main.require('./models/covers');
 const usersModel = require.main.require('./models/user');
+const subscriptionModel = require.main.require('./models/subscriber');
+const transactionModel = require.main.require('./models/transaction');
+
+
 
 
 // ROUTES
@@ -45,7 +49,37 @@ router.get('/upload', function(req, res) {
 });
 router.get('/user-management', function(req, res) {
 	usersModel.getAll((result)=>{
-	  res.render('admin/user-management',{users:result});
+		transactionModel.getAll((trans)=>{
+		  res.render('admin/user-management',{users:result,moment:moment,trans:trans});
+		});
+	});
+});
+router.post('/changeType',function(req,res){
+	var data={
+		type:req.body.type,
+		user_id:req.body.user_id
+	};
+	usersModel.changeType(data,(flag)=>{
+		if(flag){
+			res.send(true);
+		}
+		else {
+			res.send(false);
+		}
+	});
+});
+router.post('/changeSubs',function(req,res){
+	var data={
+		type:req.body.type,
+		user_id:req.body.user_id
+	};
+	subscriptionModel.changeSubs(data,(flag)=>{
+		if(flag){
+			res.send(true);
+		}
+		else {
+			res.send(false);
+		}
 	});
 });
 router.get('/cover/remove/:id',function(req,res){

@@ -21,5 +21,11 @@ module.exports = {
 			callback(flag);
 		});
   },
+  changeSubs: function(values,callback){
+		var sql="UPDATE subscribers SET status='"+values.type+"' where user_id='"+values.user_id+"'";
+		database.execute(sql,function(flag){
+			callback(flag);
+		});
+	},
 
 };

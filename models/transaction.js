@@ -16,6 +16,12 @@ module.exports = {
 			callback(flag);
 		});
 	},
+  getAll: function(callback){
+    var sql = "SELECT * FROM transactions";
+		database.getResult(sql, function(flag){
+			callback(flag);
+		});
+  },
 
 
 };

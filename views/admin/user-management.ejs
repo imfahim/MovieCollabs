@@ -1,22 +1,42 @@
 <div class="container">
+  <div class="row">
   <div class="col-md-6">
     <div class="panel panel-default">
-      <div class="panel-heading">Users</div>
+      <div class="panel-heading"><center>Users</center></div>
       <div class="panel-body">
         <table class="table table-striped">
           <thead>
             <tr>
-              <th>bKash ID</th>
-              <th>Month</th>
-              <th>Amount</th>
+              <th>ID</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Type</th>
+              <th>Subscription</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             <% for(var i = 0; i < users.length; i++) {%>
                 <tr>
-                  <td><%= users[i].bkash_id %></td>
-                  <td><%= moment(users[i].date).format( 'MMMM,YYYY') %></td>
-                  <td>$<%= users[i].amount %></td>
+                  <td><%= users[i].id %></td>
+                  <td><%= users[i].username %></td>
+                  <td><%= users[i].email %></td>
+                  <td>
+                    <select class="form-control" onchange="changeType(this,'<%= users[i].id %>');">
+                      <option value="0" <%if(users[i].type==0){%> selected<%}%>>User</option>
+                      <option value="1" <%if(users[i].type==1){%> selected<%}%>>Admin</option>
+                    </select>
+                  </td>
+                  <td><center>
+                    <%if(users[i].status=='paid'){%>
+                    <select class="form-control" onchange="changeSubs(this,'<%= users[i].id %>');">
+                      <option value="0" selected><%= users[i].status %></option>
+                      <option value="on">Activate</option>
+                    </select>
+                    <%}else{%>
+                      <label><%=users[i].status%></label>&nbsp;&nbsp;<span class="glyphicon glyphicon-one-fine-dot" <%if(users[i].status=='on'){%>style="color:green"<%}else{%>style="color:#A70008"<%}%>></span>
+                      <%}%>
+                    </center></td>
                 </tr>
                 <% } %>
           </tbody>
@@ -24,4 +44,84 @@
       </div>
     </div>
   </div>
+  <div class="col-md-6">
+    <div class="panel panel-default">
+  <div class="panel-heading"><center>Transaction History</center></div>
+  <div class="panel-body">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>User ID</th>
+          <th>Date</th>
+          <th>Amount</th>
+          <th>bKash ID</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for(var i = 0; i < trans.length; i++) {%>
+          <tr>
+            <td><%=trans[i].transaction_id%></td>
+            <td><%=trans[i].user_id%></td>
+            <td><%=moment(trans[i].date).format( 'MMMM,YYYY')%></td>
+            <td>$<%=trans[i].amount%></td>
+            <td><%=trans[i].bkash_id%></td>
+          </tr>
+          <%}%>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Total: $<%=trans.length*9.99%></td>
+            <td></td>
+          </tr>
+      </tbody>
+    </table>
+
+  </div>
 </div>
+  </div>
+</div>
+</div>
+<script>
+function changeType(type,user_id){
+  $.ajax({
+url: '/admin/changeType',
+method: 'POST',
+data: {
+    'type': type.value,
+    'user_id': user_id
+    },
+success: function(flag) {
+  if(flag){
+    alert('Succesful');
+  }
+  else {
+    alert('Error');
+  }
+}
+});
+}
+function changeSubs(type,user_id){
+  if(type.value=='on')
+  $.ajax({
+url: '/admin/changeSubs',
+method: 'POST',
+data: {
+    'type': type.value,
+    'user_id': user_id
+    },
+success: function(flag) {
+  if(flag){
+    alert('Succesful');
+  }
+  else {
+    alert('Error');
+  }
+  location.reload("/admin/user-management");
+}
+
+});
+}
+</script>
