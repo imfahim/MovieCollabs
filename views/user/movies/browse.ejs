@@ -1,0 +1,14 @@
+<div class="container">
+  <div class="well well-sm">
+
+<center><ul id="myList">
+  <br>
+  <%for(var i=0;i< movies.length;i++){%>
+    <li><label><a href="/movie/<%= movies[i].movie_id %>"><%= movies[i].title %>&nbsp;(<%=moment(movies[i].release_date).format('YYYY')%>)</a></label></li>
+    <%}%>
+</ul></center>
+  </div>
+</div>
+<script>
+  $("#myList").listnav();
+</script>

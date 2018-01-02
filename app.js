@@ -31,6 +31,8 @@ const movieManager = require('./controllers/user/movieController');
 const profileManager = require('./controllers/user/profileController');
 const buddyManager = require('./controllers/user/buddyController');
 const notificationManager = require('./controllers/user/notificationController');
+const browseManager = require('./controllers/user/browseController');
+
 
 // CONFIGURATION
 app.set('view engine', 'ejs');
@@ -67,6 +69,7 @@ app.use('/subscribe', subscription);
 app.use('/profile', profileManager);
 app.use('/movie', movieManager);
 app.use('/buddy', buddyManager);
+app.use('/browse', browseManager);
 app.use('/notifications', notificationManager);
 
 

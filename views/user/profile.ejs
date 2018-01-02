@@ -1,11 +1,12 @@
 <%- contentFor('body') %>
 <div class="container">
   <div class="dropdown pull-right">
-   <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Buddy Requests <span class="badge"><%=reqsts.length%></span>
+   <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" <%if(reqsts.length==0){%>disabled<%}%>>Buddy Requests <span class="badge"><%=reqsts.length%></span>
    <span class="caret"></span></button>
    <ul class="dropdown-menu">
      <% for(var i=0;i< reqsts.length;i++) { %>
      <li><a href="/profile/profileOf/<%=reqsts[i].id%>"><%=reqsts[i].username%></a></li><%}%>
+
    </ul>
   </div>
   <div class="row">
@@ -34,6 +35,36 @@
         <div class="panel-heading"><center>Profile</center></div>
         <div class="panel-body">
 
+
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading"><center>History</center></div>
+        <div class="panel-body">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Completed</th>
+                <th>Watching</th>
+              </tr>
+            </thead>
+            <tbody>
+          <%for(var i=0;i< history.length;i++){%>
+              <tr>
+                <td><%=i+1%></td>
+                <td><a href="/movie/<%= history[i].movie_id %>"><%=history[i].title%></a></td>
+                <td><%=moment(history[i].watch_date).format('DD/MM/YYYY')%></td>
+                <td><%=moment(history[i].watch_date).format('h:mm:ss a')%></td>
+                <td><%=history[i].completed%></td>
+                <td><%if(history[i].currently_watching){%><span class="glyphicon glyphicon-one-fine-dot" style="color:green"></span><%}%></td>
+              </tr>
+            <%}%>
+            </tbody>
+          </table>
 
         </div>
       </div>

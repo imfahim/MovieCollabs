@@ -24,8 +24,134 @@
   </div>
 </div>
 <script>
+var db;
 var myPlayer = document.getElementById("my-video");
+myPlayer.onended = function() {
+    $.ajax({
+      url: '/movie/play/complete',
+      method: 'POST',
+      data: {
+          'movie_id': <%=movie_id%>,
+          'user_id': <%=locals.session.loggedId%>,
+          },
+      success: function(flag) {
+        if(!flag){
+          alert('db ERROR');
+        }
+        else{
+        myPlayer.pause();
+        myPlayer.currentTime=0;
+        }
+      }
+      });
+};
 myPlayer.onpause = function() {
-   alert(myPlayer.currentTime);
+   if(db==false){
+     $.ajax({
+       url: '/movie/play/newmovie',
+       method: 'POST',
+       data: {
+           'movie_id': <%=movie_id%>,
+           'user_id': <%=locals.session.loggedId%>,
+           'time':myPlayer.currentTime,
+           },
+       success: function(flag) {
+         if(!flag){
+           alert('db ERROR');
+         }
+       }
+       });
+   }
+   else if(db==true){
+     $.ajax({
+       url: '/movie/play/setmovie',
+       method: 'POST',
+       data: {
+           'movie_id': <%=movie_id%>,
+           'user_id': <%=locals.session.loggedId%>,
+           'time':myPlayer.currentTime,
+           },
+       success: function(flag) {
+         if(!flag){
+           alert('db ERROR');
+         }
+       }
+       });
+   }
+   else{
+     alert('ERROR');
+   }
+
+};
+
+myPlayer.onplay = function(){
+      $.ajax({
+        url: '/movie/play/getmovie',
+        method: 'POST',
+        data: {
+            'movie_id': <%=movie_id%>,
+            'user_id': <%=locals.session.loggedId%>,
+            },
+        success: function(flag) {
+          if(flag==''){
+            db=false;
+          }
+          else {
+            db=true;
+            myPlayer.currentTime=JSON.parse(flag).time;
+            $.ajax({
+              url: '/movie/play/watchmovie',
+              method: 'POST',
+              data: {
+                  'movie_id': <%=movie_id%>,
+                  'user_id': <%=locals.session.loggedId%>,
+                  },
+              success: function(flag) {
+                if(!flag){
+
+                  alert('DB ERROR');
+                }
+              }
+              });
+          }
+        }
+        });
+};
+window.onbeforeunload=function(){
+  if(!myPlayer.paused){
+  alert('reload');
+  $.ajax({
+    url: '/movie/play/setmovie',
+    method: 'POST',
+    data: {
+        'movie_id': <%=movie_id%>,
+        'user_id': <%=locals.session.loggedId%>,
+        'time':myPlayer.currentTime,
+        },
+    success: function(flag) {
+      if(!flag){
+        alert('db ERROR');
+      }
+    }
+    });
+  }
+};
+window.onunload=function(){
+  if(!myPlayer.paused){
+  $.ajax({
+    url: '/movie/play/setmovie',
+    method: 'POST',
+    data: {
+        'movie_id': <%=movie_id%>,
+        'user_id': <%=locals.session.loggedId%>,
+        'time':myPlayer.currentTime,
+        },
+    success: function(flag) {
+      if(!flag){
+        alert('db ERROR');
+      }
+    }
+    });
+  }
 };
 </script>

@@ -67,7 +67,7 @@ module.exports = {
 		database.execute(sql, (flag) => {
 			callback(flag);
 		});
-	}
+	},
 	changeType: function(values,callback){
 		var sql="UPDATE users SET type='"+values.type+"' where id='"+values.user_id+"'";
 		database.execute(sql,function(flag){

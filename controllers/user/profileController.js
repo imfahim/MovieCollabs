@@ -1,11 +1,14 @@
 // DECLARATION
 const express = require('express');
+const moment = require('moment');
 const router = express.Router();
 
 const my_listModel = require.main.require('./models/my_list');
 const watch_listModel = require.main.require('./models/watchlist');
 const userModel = require.main.require('./models/user');
 const buddyModel = require.main.require('./models/buddy_lists');
+const historyModel = require.main.require('./models/history');
+
 
 
 
@@ -25,7 +28,10 @@ router.get('/', (request, response, next) => {
     my_listModel.moviesFromMyList({ user_id:request.session.loggedId }, (mylist_result) => {
 			watch_listModel.moviesFromMyList({ user_id:request.session.loggedId }, (watchlist_result) => {
 				buddyModel.requests(request.session.loggedId,(reqsts)=>{
-				response.render('user/profile', { mylist: mylist_result , watchlist: watchlist_result,reqsts:reqsts});
+					historyModel.myHistory(request.session.loggedId,(histories)=>{
+						console.log(histories);
+						response.render('user/profile', { mylist: mylist_result , watchlist: watchlist_result,reqsts:reqsts,history:histories,moment:moment});
+					});
 				});
 			});
     });

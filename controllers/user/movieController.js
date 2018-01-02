@@ -10,6 +10,7 @@ const my_listModel = require.main.require('./models/my_list');
 const watch_listModel = require.main.require('./models/watchlist');
 const reviewModel = require.main.require('./models/review');
 const likeModel = require.main.require('./models/like');
+const historyModel = require.main.require('./models/history');
 
 
 // ROUTES
@@ -104,7 +105,60 @@ router.get('/play/:id', (request, response, next) => {
 	});
 
 });
-
+router.post('/play/getmovie',(req,res)=>{
+	var data={
+		movie_id:req.body.movie_id,
+		user_id:req.body.user_id
+	};
+	historyModel.getMovie(data,(result)=>{
+		if(result==null){
+			res.send(null);
+		}
+		else{
+			res.send(JSON.stringify(result, null, 3));
+		}
+	});
+});
+router.post('/play/newmovie',(req,res)=>{
+	var data={
+		movie_id:req.body.movie_id,
+		user_id:req.body.user_id,
+		time:req.body.time
+	};
+	historyModel.newMovie(data,(result)=>{
+		res.send(result);
+	});
+});
+router.post('/play/watchmovie',(req,res)=>{
+	var data={
+		movie_id:req.body.movie_id,
+		user_id:req.body.user_id,
+		date:moment().format("YYYY-MM-DD hh:mm:ss"),
+	};
+	historyModel.watchMovie(data,(result)=>{
+		res.send(result);
+	});
+});
+router.post('/play/setmovie',(req,res)=>{
+	var data={
+		movie_id:req.body.movie_id,
+		user_id:req.body.user_id,
+		time:req.body.time,
+		date:moment().format("YYYY-MM-DD hh:mm:ss"),
+	};
+	historyModel.setMovie(data,(result)=>{
+		res.send(result);
+	});
+});
+router.post('/play/complete',(req,res)=>{
+	var data={
+		movie_id:req.body.movie_id,
+		user_id:req.body.user_id,
+	};
+	historyModel.completeMovie(data,(result)=>{
+		res.send(result);
+	});
+});
 router.get('/my_list/add/:id', (request, response, next) => {
   var movie_id = request.params.id;
 	var data={

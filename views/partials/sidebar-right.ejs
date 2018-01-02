@@ -1,5 +1,5 @@
 <!-- Fixed Sidebar Right -->
-
+<%if(locals.session.loggedId){%>
 <div class="fixed-sidebar right">
 	<div class="fixed-sidebar-right sidebar--small" id="sidebar-right" style="background-color: black;">
 
@@ -211,6 +211,8 @@
 		if(result != ''){
 			$.each(result, (key, value) => {
 				if(value.status == 1){
+					var id=<%=locals.session.loggedId%>;
+					if(id!=value.id){
 					$('#friends').append(
 						"<li class='inline-items'>" +
 							"<div class='author-thumb'>" +
@@ -227,7 +229,7 @@
 							"</div>" +
 						"</li>"
 					);
-				}else{
+				}}else{
 					$('#friends').append(
 						"<li class='inline-items'>" +
 							"<div class='author-thumb'>" +
@@ -316,3 +318,4 @@
 
 
 </script>
+<%}%>
