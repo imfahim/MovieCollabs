@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const buddyModel = require.main.require('./models/buddy_lists');
+const partyInvitesModel = require.main.require('./models/party_invites');
 
 // ROUTES
 router.all('*', (request, response, next) => {
@@ -64,6 +65,21 @@ router.post('/accept',(request,response)=>{
       request.flash('fail', 'Failed to cancel!', '/profile/profileOf/'+user_id);
     }
   });
+});
+
+router.post('/party/invite', (request, response, next) => {
+	backURL = request.header('Referer') || '/';
+	var data = {
+		party_id: request.body.party,
+		user_id: request.body.user_id
+	};
+	partyInvitesModel.insert(data, (flag) => {
+		if(flag){
+			request.flash('Success', 'Successfully sent!', backURL);
+		}else{
+			request.flash('fail', 'Failed to sent!', backURL);
+		}
+	});
 });
 
 

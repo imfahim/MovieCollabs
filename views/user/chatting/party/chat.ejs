@@ -1,26 +1,31 @@
-
-<!doctype html>
-<html>
-    <head>
-        <title>Socket.IO Chat</title>
-        <style>
-            #chat {
-              height: 500px;
-              border: 1px solid white;
-            }
-        </style>
-    </head>
-    <body>
+<%- contentFor('body') %>
 
       <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-12">
+          <div class="well well-lg">
+            <video id="my-video" class="video-js" controls preload="auto" width="100%" height="100%" data-setup="{}">
+              <!-- Documentation - http://videojs.com/getting-started/#build-build
+              second: https://github.com/videojs/video.js
+              third: https://www.npmjs.com/package/video.js/
+              forth: http://docs.videojs.com/
+            -->
+                <!--<source src="/public/videos/SpaceShooter-GamePlay.mp4" type='video/mp4'>-->
+                <source src="/public/movies/1.mp4" type='video/mp4'>
+                <p class="vjs-no-js">
+                  To view this video please enable JavaScript, and consider upgrading to a web browser that
+                  <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                </p>
+              </video>
+          </div>
+        </div>
+        <div class="col-md-12">
 
           <!--<a href="/chat/party/create" target="_blank" class="btn btn-primary">Create Room</a>-->
-          <div style="float:left;width:100px;border-right:1px solid black;height:300px;padding:10px;overflow:scroll-y;">
-          	<b>ROOMS</b>
-          	<div id="rooms"></div>
+          <div class="col-md-4">
+          	<b>Connected</b>
+          	<div id="clients"></div>
           </div>
-          <div style="float:left;width:300px;height:250px;overflow:scroll-y;padding:10px;">
+          <div class="col-md-8">
           	<div id="conversation"></div>
           	<input id="data" style="width:200px;" />
           	<input type="button" id="datasend" value="send" />
@@ -28,47 +33,48 @@
         </div>
 
       </div>
-
-
+      <div class="col-md-2">
+        <button type="button" class="btn btn-danger" id="btn-leave">Leave</button>
+      </div>
 
 
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
       <script src="/socket.io/socket.io.js"></script>
       <script>
-<<<<<<< Updated upstream
           // getting the id of the room from the url
           //var partyid = Number(window.location.pathname.match(/\/party\/(\d+)$/)[1]);
-          alert('ok');
-          var socket = io.connect();
+          var socket = io.connect({transports: ['websocket'], upgrade: false});
 
-        	// on connection to server, ask for user's name with an anonymous callback
-        	socket.on('connect', function(){
-        		// call the server-side function 'adduser' and send one parameter (value of prompt)
-        		socket.emit('adduser', prompt("What's your name?"));
-        	});
+          socket.emit('join', { username: '<%= locals.session.loggedUsername %>', room: '<%= partyid %>' });
+          socket.emit('notify', { party_name: '<%= partyname %>', party_leader: '<%= partyleader_username %>' });
 
         	// listener, whenever the server emits 'updatechat', this updates the chat body
         	socket.on('updatechat', function (username, data) {
         		$('#conversation').append('<b>'+username + ':</b> ' + data + '<br>');
         	});
 
-        	// listener, whenever the server emits 'updaterooms', this updates the room the client is in
-        	socket.on('updaterooms', function(rooms, current_room) {
-        		$('#rooms').empty();
-        		$.each(rooms, function(key, value) {
-        			if(value == current_room){
-        				$('#rooms').append('<div>' + value + '</div>');
-        			}
-        			else {
-        				$('#rooms').append('<div><a href="#" onclick="switchRoom(\''+value+'\')">' + value + '</a></div>');
-        			}
-        		});
-        	});
 
-        	function switchRoom(room){
-        		socket.emit('switchRoom', room);
-        	}
+          socket.on('updateclientlist', (clients) => {
+            $('#clients').empty();
+            $.each(clients, (key, value) => {
+              $('#clients').append('<div>'
+              + value +
+              '</div>');
+            });
+          });
+        	// // listener, whenever the server emits 'updaterooms', this updates the room the client is in
+        	// socket.on('updaterooms', function(rooms, current_room) {
+        	// 	$('#rooms').empty();
+        	// 	$.each(rooms, function(key, value) {
+        	// 		if(value == current_room){
+        	// 			$('#rooms').append('<div>' + value + '</div>');
+        	// 		}
+        	// 		else {
+        	// 			$('#rooms').append('<div><a href="#" onclick="switchRoom(\''+value+'\')">' + value + '</a></div>');
+        	// 		}
+        	// 	});
+        	// });
 
         	// on load of page
         	$(function(){
@@ -87,28 +93,11 @@
         				$('#datasend').focus().click();
         			}
         		});
+
+            // when the client hits LEAVE
+            $('#btn-leave').click((e) => {
+              socket.emit('leave');
+              $(location).attr('href', '/chat/leave/<%= partyid %>');
+            });
         	});
-
-=======
-        $(document).ready(function(){
-
-          var socket = io.connect();
-          var messageForm = $('#send-message');
-          var message = $('#message');
-          var chat = $('#chat');
-
-          messageForm.submit(function(e){
-            e.preventDefault();
-            socket.emit('send message', message.val());
-            message.val('');
-          });
-
-          socket.on('new message', function(message){
-            chat.append(message + '<br />');
-          });
-        });
-        alert('docu ready');
->>>>>>> Stashed changes
       </script>
-    </body>
-</html>

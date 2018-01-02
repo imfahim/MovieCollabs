@@ -17,7 +17,87 @@
      <%if(!locals.session.loggedId){%>
      <li><a href="#" data-toggle="modal" data-target="#basicModal"><span class="glyphicon glyphicon-log-in"></span> Join</a></li><%}%>
      <%if(locals.session.loggedId){%>
-       <li><a href="/login/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li><%}%>
+       <li><a href="/login/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+       <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <span class="glyphicon glyphicon-bell alertNotificacao"></span>
+            <span class='badgeAlert' id="notiCount"></span>
+            <span class="caret"></span></a>
+          <ul class="list-notificacao dropdown-menu" id="notifications-ul">
+
+          </ul>
+       </li>
+     <%}%>
    </ul>
  </div>
 </nav>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  function excluirItemNotificacao(e){
+    $('#item_notification_'+e.id).remove();
+    //$('#notiCount').append($('#notiCount') - 1);
+  }
+
+  var socket = io.connect({transports: ['websocket'], upgrade: false});
+
+  socket.emit('updateNotifications', '<%= locals.session.loggedId %>');
+
+  socket.on('updateUserNotifications', (result) => {
+    $('#notiCount').empty();
+    $('#notifications-ul').empty();
+    if(result != ''){
+      $('#notiCount').append(result.length);
+      $.each(result, (key, value) => {
+        $('#notifications-ul').append(
+          "<li id='item_notification_'" + key + ">" +
+              "<div class='media'>" +
+                 "<div class='media-left'>" +
+                    "<a href='#'>" +
+                    "<img alt='64x64' class='media-object'> </a>" +
+                 "</div>" +
+                 "<div class='media-body'>" +
+                    "<div class='exclusaoNotificacao'><button class='btn btn-danger btn-xs button_exclusao' id='1' onclick='excluirItemNotificacao(this)'>x</button>" +
+                    "</div>" +
+                    "<h4 class='media-heading' style='color: red;'>Party Inviation</h4>" +
+                    "<p>From <strong>'" + value.username + "'</strong> For <strong>'" + value.party_name + "'</strong></p>" +
+                 "</div>" +
+                 "<div class='pull-right'>" +
+                  "<a href='/chat/join/" + value.party_id + "' target='_blank' class='btn btn-success'><span class='fa fa-check'></span></a>" +
+                  "<a href='#' class='btn btn-warning'><span class='fa fa-close'></span></a>" +
+                 "</div>" +
+              "</div>" +
+           "</li>"
+        );
+      });
+      $('#notifications-ul').append(
+        "<a href='/notifications'>" +
+          "<li id='item_notification_100'>" +
+             "<div class='media'>" +
+                "<center>See All Notifications</center>" +
+             "</div>" +
+          "</li>" +
+        "</a>"
+      );
+    }else{
+      $('#notiCount').remove();
+      $('#notifications-ul').append(
+        "<li id='item_notification_1000>" +
+            "<div class='media'>" +
+               "<div class='media-body'>" +
+                  "<p>No Notifications Yet !</p>" +
+               "</div>" +
+            "</div>" +
+         "</li>"
+      );
+    }
+
+    /*
+    setTimeout(() => {
+			socket.emit('updateNotifications', '<%= locals.session.loggedId %>');
+		}, 3000);
+    */
+  });
+</script>

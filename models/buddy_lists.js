@@ -34,7 +34,10 @@ module.exports = {
     });
 
   },
-
-
-
+  getBuddys: (my_id, callback) => {
+    var sql = "SELECT u.id, u.username, u.status FROM buddy_list AS bl JOIN users AS u ON bl.user_id2 = u.id WHERE bl.status = 'accepted'";
+    database.getResult(sql, (result) => {
+      callback(result);
+    });
+  },
 };

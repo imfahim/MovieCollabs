@@ -25,11 +25,12 @@ const login = require('./controllers/loginController');
 const userManager = require('./controllers/user/indexController');
 const adminManager = require('./controllers/admin/adminController');
 const subscription = require('./controllers/user/subscriptionController');
-const partyChatManager = require('./controllers/user/partyChatController');
+const socketController = require('./controllers/user/socketController');
 const chatManager = require('./controllers/user/chatController');
 const movieManager = require('./controllers/user/movieController');
 const profileManager = require('./controllers/user/profileController');
 const buddyManager = require('./controllers/user/buddyController');
+const notificationManager = require('./controllers/user/notificationController');
 
 // CONFIGURATION
 app.set('view engine', 'ejs');
@@ -66,20 +67,17 @@ app.use('/subscribe', subscription);
 app.use('/profile', profileManager);
 app.use('/movie', movieManager);
 app.use('/buddy', buddyManager);
+app.use('/notifications', notificationManager);
 
 
 // For Admins
 app.use('/admin', adminManager);
 
 // Chatting test
-console.log('eikhane ashse');
 io.on('connection', (socket) => {
-    console.log('vitore ashse');
-    partyChatManager.respond(io, socket);
+    console.log('Connected as New');
+    socketController.respond(io, socket);
   });
-
-//app.set('chat', partyChat);
-  //console.log(partyChat);
 app.use('/chat', chatManager);
 
 

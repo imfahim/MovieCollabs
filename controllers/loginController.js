@@ -25,8 +25,13 @@ router.post('/', (request, response) => {
 			request.session.loggedId = valid[1];
 			request.session.type=valid[2];
 
-			request.flash('success', 'Successfully Logged In !', '/home');
-
+			userModel.setUserStatusOn(request.session.loggedId, (flag) => {
+				if(flag){
+					request.flash('success', 'Successfully Logged In !', '/home');
+				}else{
+					request.flash('fail', 'Error Occured !', '/');
+				}
+			});
 		}
 		else
 		{
@@ -36,10 +41,16 @@ router.post('/', (request, response) => {
 });
 
 router.get('/logout', (request, response, next) => {
-    request.session.destroy(() => {
-        response.clearCookie('connect.sid')
-        response.redirect('/')
-    });
-})﻿;
+		userModel.setUserStatusOff(request.session.loggedId, (flag) => {
+			if(flag){
+				request.session.destroy(() => {
+		        response.clearCookie('connect.sid')
+		        response.redirect('/')
+		    });
+			}else{
+				request.flash('fail', 'Error Occured !', '/');
+			}
+		});
+});﻿
 
 module.exports = router;

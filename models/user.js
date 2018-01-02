@@ -56,4 +56,16 @@ module.exports = {
 			callback(result);
 		});
 	},
+	setUserStatusOn: (user_id, callback) => {
+		var sql = "UPDATE users SET status = 1 WHERE id = '" + user_id + "'";
+		database.execute(sql, (flag) => {
+			callback(flag);
+		});
+	},
+	setUserStatusOff: (user_id, callback) => {
+		var sql = "UPDATE users SET status = 0 WHERE id = '" + user_id + "'";
+		database.execute(sql, (flag) => {
+			callback(flag);
+		});
+	}
 };
