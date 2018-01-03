@@ -8,6 +8,7 @@ const watch_listModel = require.main.require('./models/watchlist');
 const userModel = require.main.require('./models/user');
 const buddyModel = require.main.require('./models/buddy_lists');
 const historyModel = require.main.require('./models/history');
+const userdetailsModel = require.main.require('./models/userdetails');
 
 
 
@@ -29,13 +30,36 @@ router.get('/', (request, response, next) => {
 			watch_listModel.moviesFromMyList({ user_id:request.session.loggedId }, (watchlist_result) => {
 				buddyModel.requests(request.session.loggedId,(reqsts)=>{
 					historyModel.myHistory(request.session.loggedId,(histories)=>{
-						console.log(histories);
-						response.render('user/profile', { mylist: mylist_result , watchlist: watchlist_result,reqsts:reqsts,history:histories,moment:moment});
-					});
-				});
-			});
-    });
+						userdetailsModel.getUserDetailsById(request.session.loggedId, (profile_result) => {
+							console.log(profile_result);
+							response.render('user/profile', { mylist: mylist_result , watchlist: watchlist_result,reqsts:reqsts,history:histories,moment:moment, userdetails: profile_result});
 });
+});
+});
+});
+});
+});
+
+router.post('/', function(request, response){
+	var details = {
+		fav_genre: request.body.f_genre,
+		fav_actor: request.body.f_actor,
+		fav_director: request.body.f_director
+	};
+
+	userdetails.update(details, function(success){
+		if(success)
+		{
+			response.redirect('/');
+		}
+		else
+		{
+			response.send('Error inserting data');
+		}
+	});
+
+});
+
 
 router.get('/profileOf/:id', (request, response, next) => {
 	var user_id=request.params.id;

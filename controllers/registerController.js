@@ -57,8 +57,14 @@ router.post('/', [
           };
           SubscribeModel.insert(values,function(flag){
             if(flag){
-              request.flash('success', 'Successfully Registered !', '/');
-            }
+              userdetailsModel.insert(valid, (flag) => {
+                if(flag){
+                  request.flash('success', 'Successfully Registered !', '/');
+                }else{
+                  request.flash('fail', 'Error Occured !', '/');
+                }
+              });
+              }
             else{
               request.flash('fail', 'Error Occured !', '/');
             }
