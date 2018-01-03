@@ -23,7 +23,7 @@ router.get('/', (request, response, next) => {
 });
 
 router.post('/create', (request, response, next) => {
-	partyModel.insertGetid({ party_id: request.body.party_id, user_id: request.session.loggedId, party_name: request.body.party_name }, (id) => {
+	partyModel.insertGetid({ party_id: request.body.party_id, user_id: request.session.loggedId, party_name: request.body.party_name,movie_id:request.body.movie_id }, (id) => {
 		if(id){
 			partyModel.getPartyById(id, (result) => {
 				response.redirect('/chat/join/' + result.party_id);
@@ -42,7 +42,7 @@ router.get('/join/:id', (request, response, next) => {
 					if(access_result.length > 0){
 						userModel.infoByid(result.leader_id, (sub_result) => {
 							if(sub_result){
-								response.render('user/chatting/party/chat', { partyid: result.party_id, partyname: result.party_name, partyleader_username: sub_result.username, partyleader_id: result.leader_id });
+								response.render('user/chatting/party/chat', { partyid: result.party_id, partyname: result.party_name, partyleader_username: sub_result.username, partyleader_id: result.leader_id,movie_id:result.movie_id, });
 							}else{
 								request.flash('fail', 'Error Occured !', '/home');
 							}
@@ -55,7 +55,7 @@ router.get('/join/:id', (request, response, next) => {
 				console.log('leader bole tai else e dhukse');
 				userModel.infoByid(result.leader_id, (sub_result) => {
 					if(sub_result){
-						response.render('user/chatting/party/chat', { partyid: result.party_id, partyname: result.party_name, partyleader_username: sub_result.username, partyleader_id: result.leader_id });
+						response.render('user/chatting/party/chat', { partyid: result.party_id, partyname: result.party_name, partyleader_username: sub_result.username, partyleader_id: result.leader_id,movie_id:result.movie_id, });
 					}else{
 						request.flash('fail', 'Error Occured !', '/home');
 					}

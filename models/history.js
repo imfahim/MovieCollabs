@@ -37,6 +37,15 @@ module.exports = {
       callback(result);
     });
   },
+  getCurrent:function(values,callback){
+    var sql="";
+    for(var i=0;i<values.length;i++){
+      sql +="SELECT movies.movie_id , movies.title,history.user_id FROM movies JOIN history ON history.movie_id=movies.movie_id WHERE history.user_id='"+values[i].id+"' and history.currently_watching='1';";
+    }
+    database.getResult(sql, (result) => {
+      callback(result);
+    });
+  },
 
 
 };

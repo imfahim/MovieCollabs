@@ -152,14 +152,14 @@ router.post('/upload',[
   }else{
 
     //console.log((req.body.genre != null) ? JSON.stringify(req.body.genre) : 'nothing');
-
+		var mDate=moment(req.body.date).format('YYYY-MM-DD');
     var new_movie = {
       title: req.body.title,
       director: req.body.director,
       cast: req.body.cast,
       plot:req.body.plot,
 			genre: (req.body.genre != null) ? JSON.stringify(req.body.genre) : '',
-      date:req.body.date
+      date:mDate
     };
     movieModel.insertGetid(new_movie,function(valid){
       if(valid>0){

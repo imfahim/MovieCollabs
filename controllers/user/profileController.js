@@ -100,5 +100,23 @@ router.get('/profileOf/:id', (request, response, next) => {
 
 });
 
+router.post('/edit',(req,res,next)=>{
+	var data = {
+		user_id: req.session.loggedId,
+		director: req.body.f_director,
+		actor: req.body.f_actor,
+		genre: (req.body.genre != null) ? JSON.stringify(req.body.genre) : '',
+	};
+	userdetailsModel.update(data,(flag)=>{
+		if(flag){
+		req.flash('Success', 'edited Successfull', '/profile');
+	}
+	else{
+		req.flash('Fail', 'Error on Update', '/profile');
+	}
+	});
+
+});
+
 
 module.exports = router;

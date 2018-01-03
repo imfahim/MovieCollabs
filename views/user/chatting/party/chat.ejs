@@ -3,14 +3,14 @@
       <div class="row">
         <div class="col-md-12">
           <div class="well well-lg">
-            <video id="my-video" class="video-js" controls preload="auto" width="100%" height="100%" data-setup="{}">
+            <video id="my-video" class="video-js" <%if(partyleader_id==locals.session.loggedId){%>controls<%}%> preload="auto" width="100%" height="100%" data-setup="{}">
               <!-- Documentation - http://videojs.com/getting-started/#build-build
               second: https://github.com/videojs/video.js
               third: https://www.npmjs.com/package/video.js/
               forth: http://docs.videojs.com/
             -->
                 <!--<source src="/public/videos/SpaceShooter-GamePlay.mp4" type='video/mp4'>-->
-                <source src="/public/movies/1.mp4" type='video/mp4'>
+                <source src="/public/movies/<%=movie_id%>.mp4" type='video/mp4'>
                 <p class="vjs-no-js">
                   To view this video please enable JavaScript, and consider upgrading to a web browser that
                   <a href="http://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
@@ -42,6 +42,8 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js"></script>
       <script src="/socket.io/socket.io.js"></script>
       <script>
+
+var myPlayer = document.getElementById("my-video");
           // getting the id of the room from the url
           //var partyid = Number(window.location.pathname.match(/\/party\/(\d+)$/)[1]);
           var socket = io.connect({transports: ['websocket'], upgrade: false});
@@ -53,6 +55,16 @@
         	socket.on('updatechat', function (username, data) {
         		$('#conversation').append('<b>'+username + ':</b> ' + data + '<br>');
         	});
+          socket.on('updateplay', function (username, data) {
+        		myPlayer.play();
+        	});
+          socket.on('updatepause', function (username, data) {
+        		myPlayer.pause();
+        	});
+          socket.on('updateseeking', function (username, data) {
+        		myPlayer.currentTime=data;
+        	});
+
 
 
           socket.on('updateclientlist', (clients) => {
@@ -75,9 +87,19 @@
         	// 		}
         	// 	});
         	// });
-
+myPlayer.onplay = function(){
+  socket.emit('sendplay','play');
+};
+myPlayer.onpause = function(){
+  socket.emit('sendpause','pause');
+};
+myPlayer.ondurationchange=function(){
+  alert(myPlayer.currentTime);
+  socket.emit('seeking',myPlayer.currentTime);
+};
         	// on load of page
         	$(function(){
+
         		// when the client clicks SEND
         		$('#datasend').click( function() {
         			var message = $('#data').val();

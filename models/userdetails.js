@@ -10,7 +10,7 @@ module.exports = {
   getUserDetailsById: (user_id, callback) => {
     var sql = "SELECT * FROM userdetails AS ud JOIN users AS u ON ud.user_id = u.id WHERE ud.user_id = '" + user_id + "'";
     database.getResult(sql, (result) => {
-      callback(result);
+      callback(result[0]);
     });
   },
   getMovieById: (movie_id, callback) => {
@@ -20,8 +20,8 @@ module.exports = {
 		});
   },
   update: (userdetails, callback)=>{
-    var sql = "UPDATE userdetails SET fav_genre=?, fav_actor=?, fav_director=? WHERE user_id=?";
-    db.execute(sql, [userdetails.fav_genre, userdetails.fav_actor, userdetails.fav_director, userdetails.user_id], function(flag){
+    var sql = "UPDATE userdetails SET fav_genre='"+userdetails.genre+"', fav_actor='"+userdetails.actor+"', fav_director='"+userdetails.director+"' WHERE user_id='"+userdetails.user_id+"'";
+    database.execute(sql, function(flag){
       callback(flag);
     });
   }

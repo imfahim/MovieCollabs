@@ -10,7 +10,7 @@ const saltRounds = 10;
 
 // MODELS
 const userModel = require.main.require('./models/user');
-
+const userdetailsModel= require.main.require('./models/userdetails');
 const SubscribeModel = require.main.require('./models/subscriber');
 
 // ROUTERS

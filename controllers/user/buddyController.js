@@ -82,6 +82,11 @@ router.post('/party/invite', (request, response, next) => {
 	});
 });
 
-
+router.post('/myBuddy',(req,res)=>{
+	var user_id= req.body.user_id;
+	buddyModel.getBuddys(user_id,(result)=>{
+		res.send(result);
+	});
+});
 
 module.exports = router;

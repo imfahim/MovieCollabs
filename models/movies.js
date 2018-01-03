@@ -8,7 +8,7 @@ module.exports = {
 		});
   },
   getMovies: (callback) => {
-    var sql = "SELECT movie_id, title,release_date FROM movies ORDER BY release_date DESC";
+    var sql = "SELECT movie_id, title,release_date,genre FROM movies ORDER BY release_date DESC";
     database.getResult(sql, (result) => {
       callback(result);
     });
@@ -24,7 +24,12 @@ module.exports = {
     database.getResult(sql, (result) => {
       callback(result);
     });
-
+  },
+  delete:(value,callback)=>{
+    var sql="DELETE FROM movies WHERE movie_id='"+value+"'";
+    database.execute(sql,(flag)=>{
+      callback(flag);
+    });
   },
 
 };

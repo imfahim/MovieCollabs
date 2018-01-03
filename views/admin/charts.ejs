@@ -49,6 +49,7 @@
         <th></th>
         <th>Title</th>
         <th>Year</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -58,6 +59,12 @@
           <td><img src="/public/poster/<%= movies[i].movie_id %>.jpg" alt="Poster" style="height:50px"></td>
           <td><a href="/movie/<%= movies[i].movie_id %>"><%= movies[i].title %></a></td>
           <td><%=moment(movies[i].release_date).format('YYYY')%></td>
+          <td>
+            <form method="POST" action="/movie/delete">
+              <input type="hidden" name="movie_id" value="<%=movies[i].movie_id%>" />
+              <input type="submit" class="btn btn-danger btn-xs" value="Delete"/>
+            </form>
+          </td>
         </tr><%}%>
     </tbody>
     </table>

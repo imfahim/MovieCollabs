@@ -3,6 +3,7 @@
 const partyModel = require.main.require('./models/party');
 const buddyModel = require.main.require('./models/buddy_lists');
 const partyInvitesModel = require.main.require('./models/party_invites');
+const historyModel = require.main.require('./models/history');
 
 // usernames which are currently connected to the chat
 var usernames = {};
@@ -50,7 +51,15 @@ module.exports.respond = (io, socket) => {
 			// we tell the client to execute 'updatechat' with 2 parameters
 			io.sockets.in(socket.room).emit('updatechat', socket.username, data);
 		});
-
+		socket.on('sendplay',function(data){
+			io.sockets.in(socket.room).emit('updateplay',socket.username,data);
+		});
+		socket.on('sendpause',function(data){
+			io.sockets.in(socket.room).emit('updatepause',socket.username,data);
+		});
+		socket.on('seeking',function(data){
+			io.sockets.in(socket.room).emit('updateseeking',socket.username,data);
+		});
 		// socket.on('switchRoom', function(newroom){
 		// 	// leave the current room (stored in session)
 		// 	socket.leave(socket.room);
@@ -85,8 +94,14 @@ module.exports.respond = (io, socket) => {
 		// Friendlist / PartyList
 		socket.on('updateFriendList', (logged_user) => {
 			buddyModel.getBuddys(logged_user, (result) => {
-				if(result){
-					io.sockets.emit('updateFriends', result);
+				if(!result.length==0){
+					historyModel.getCurrent(result,(flag)=>{
+						var data={
+							result:result,
+							current:flag
+						};
+						io.sockets.emit('updateFriends', data);
+					});
 				}else{
 					io.sockets.emit('updateFriends', '');
 				}
@@ -128,7 +143,7 @@ module.exports.respond = (io, socket) => {
 
 
 		// Video Streaming
-		
+
 };
 
 

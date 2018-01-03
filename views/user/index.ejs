@@ -52,19 +52,23 @@
       </div>
     </div>
   </div>
+  <%if(locals.session.subscribe!='on'){%>
   <div class="panel panel-default">
     <div class="panel-body">
-      subscribe banner if not subscribed or guest
+      <center><img src="/public/covers/subs2.jpg" alt="Poster" style="width:1200px;"></center>
     </div>
   </div>
+  <%}%>
   <div class="panel panel-default">
-    <div class="panel-heading">Suggesions</div>
+    <div class="panel-heading"><center>Suggesions</center></div>
     <div class="panel-body">
         <div class="swiper-container">
           <div class="swiper-wrapper">
-            <% movies.forEach((movie) => { %>
-                <div class="swiper-slide"><center><%=movie.title%>(<%=moment(movie.release_date).format('YYYY')%>)<br><a href="/movie/<%= movie.movie_id %>"><img src="/public/poster/<%= movie.movie_id %>.jpg" alt="Poster" style="height:300px"></a></center></div>
-            <% }); %>
+            <%if(suggestions==null){%>
+              Please, Update Your Profile!!!
+              <%}else{for(var i=0;i< 10;i++){%>
+                <div class="swiper-slide"><center><%=suggestions[i][1].title%>&nbsp;(<%=moment(suggestions[i][1].release_date).format('YYYY')%>)<br><a href="/movie/<%= suggestions[i][1].movie_id %>"><img src="/public/poster/<%= suggestions[i][1].movie_id %>.jpg" alt="Poster" style="height:300px"></a></center></div>
+            <%}}%>
           </div>
           <!-- Add Pagination -->
           <div class="swiper-pagination"></div>
@@ -72,21 +76,17 @@
     </div>
   </div>
   <div class="panel panel-default">
-    <div class="panel-heading">Latest Movies</div>
+    <div class="panel-heading"><center>Latest Movies</center></div>
     <div class="panel-body">
-      <marquee>Hello</marquee>
-      <h4>With Ajax Jquery</h4>
-      <div id="movies-list"></div>
-      <br />
-      <br />
-      <h4>With normal db</h4>
-      <ul>
-        <% movies.forEach((movie) => { %>
-          <li>
-            <a href="/movie/<%= movie.movie_id %>"><span class="glyphicon glyphicon-film"></span> <%= movie.title %></a>
-          </li>
-        <% }); %>
-      </ul>
+      <div class="swiper-container">
+        <div class="swiper-wrapper">
+          <%for(var i=0;i< 10;i++){%>
+              <div class="swiper-slide"><center><%=movies[i].title%>&nbsp;(<%=moment(movies[i].release_date).format('YYYY')%>)<br><a href="/movie/<%= movies[i].movie_id %>"><img src="/public/poster/<%= movies[i].movie_id %>.jpg" alt="Poster" style="height:300px"></a></center></div>
+          <%}%>
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination"></div>
+    </div>
     </div>
   </div>
   <div class="panel panel-default">
@@ -123,10 +123,18 @@
 	            <label for="party_id" class="form-control-label">Party ID :</label>
 							<input type="text" class="form-control" id="party_id" name="party_id">
 	          </div>
+            <div class="form-group">
+               <label>Select Movie:</label>
+               <select class="form-control" name="movie_id">
+                 <%for(var i=0;i< movies.length;i++){%>
+                 <option value='<%=movies[i].movie_id%>'><%=movies[i].title%>(<%=moment(movies[i].release_date).format('YYYY')%>)</option>
+                 <%}%>
+               </select>
+              </div>
 
 	      </div>
 	      <div class="modal-footer">
-	        <input type="submit" class="btn btn-success" value="Create" />
+	        <input type="submit" class="btn btn-success" value="Create" <% if(locals.session.subscribe!='on'){%>disabled<%}%>/>
 	      </div>
 			</form>
     </div>

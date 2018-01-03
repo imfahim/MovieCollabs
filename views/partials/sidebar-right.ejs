@@ -83,11 +83,6 @@
 				<svg class="olymp-menu-icon"><use xlink:href="/public/icons/icons.svg#olymp-menu-icon"></use></svg>
 			</a>
 		</div>
-
-		<a href="34-YourAccount-ChatMessages.html" class="olympus-chat inline-items">
-			<svg class="olymp-chat---messages-icon"><use xlink:href="/public/icons/icons.svg#olymp-chat---messages-icon"></use></svg>
-		</a>
-
 	</div>
 
 	<div class="fixed-sidebar-right sidebar--large" id="sidebar-right-1" style="background-color: black;">
@@ -105,7 +100,7 @@
 			<div class="ui-block-title ui-block-title-small">
 				<a href="#" class="title">My Parties</a>
 				<div class="pull-right">
-					<button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal" id="btn-create-party"><span class="fa fa-plus"></span></button>
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" id="btn-create-party"><span class="fa fa-plus"></span></button>
 				</div>
 			</div>
 
@@ -134,11 +129,6 @@
 
 		</div>
 
-		<a href="/chat/party/create" class="olympus-chat inline-items">
-
-
-			<svg class="olymp-chat---messages-icon"><use xlink:href="/public/icons/icons.svg#olymp-chat---messages-icon"></use></svg>
-		</a>
 
 	</div>
 </div>
@@ -179,10 +169,9 @@
             <label for="party_name" class="form-control-label">Select a Party :</label>
 						<select name="party" id="party-options" class="form-control"></select>
           </div>
-
 	      </div>
 	      <div class="modal-footer">
-	        <input type="submit" class="btn btn-success" value="Send" />
+	        <input type="submit" class="btn btn-success" value="Send" <% if(locals.session.subscribe!='on'){%>disabled<%}%>/>
 	      </div>
 			</form>
     </div>
@@ -209,10 +198,31 @@
 	socket.on('updateFriends', (result) => {
 		$('#friends').empty();
 		if(result != ''){
-			$.each(result, (key, value) => {
+			$.each(result.result, (key, value) => {
 				if(value.status == 1){
 					var id=<%=locals.session.loggedId%>;
 					if(id!=value.id){
+						$.each(result.current, (index, val) => {
+							$.each(val, (key2, value2) => {
+							if(value2.user_id==value.id){
+					$('#friends').append(
+						"<li class='inline-items'>" +
+							"<div class='author-thumb'>" +
+								"<img alt='author' src='/public/img/avatar68-sm.jpg' class='avatar'>" +
+								"<span class='icon-status online'></span>" +
+							"</div>" +
+
+							"<div class='author-status'>" +
+								"<a href='/profile/profileOf/" + value.id + "' class='h6 author-name'>" + value.username + "</a>&nbsp;<a href='/profile/profileOf/"+value2.id+"' class='h6 author-name' style='color:green'>(watching "+value2.title+")</a>" +
+								"<span class='status'>ONLINE</span>" +
+							"</div>" +
+
+							"<div class='more'><svg id='btn-invite' data-toggle='modal' data-target='#partyInviteModal' data-id='" + value.id + "' data-original-title='ADD TO PARTY' class='olymp-add-to-conversation-icon'><use xlink:href='/public/icons/icons.svg#olymp-add-to-conversation-icon'></use></svg>" +
+							"</div>" +
+						"</li>"
+					);
+				}
+				else{
 					$('#friends').append(
 						"<li class='inline-items'>" +
 							"<div class='author-thumb'>" +
@@ -229,6 +239,8 @@
 							"</div>" +
 						"</li>"
 					);
+				}
+			});});
 				}}else{
 					$('#friends').append(
 						"<li class='inline-items'>" +

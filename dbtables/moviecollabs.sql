@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 01, 2018 at 12:55 PM
+-- Generation Time: Jan 03, 2018 at 10:47 PM
 -- Server version: 10.1.26-MariaDB
 -- PHP Version: 7.1.9
 
@@ -42,8 +42,9 @@ CREATE TABLE `buddy_list` (
 --
 
 INSERT INTO `buddy_list` (`buddy_id`, `user_id1`, `user_id2`, `status`, `created_at`, `updated_at`) VALUES
-(8, 8, 15, 'requested', '2017-12-31 14:57:57', NULL),
-(10, 8, 14, 'requested', '2018-01-01 06:34:01', NULL);
+(8, 8, 15, 'accepted', '2017-12-31 14:57:57', NULL),
+(10, 8, 14, 'requested', '2018-01-01 06:34:01', NULL),
+(11, 7, 15, 'requested', '2018-01-02 21:03:56', NULL);
 
 -- --------------------------------------------------------
 
@@ -78,8 +79,17 @@ CREATE TABLE `history` (
   `movie_id` int(11) NOT NULL,
   `episode` int(11) NOT NULL DEFAULT '1',
   `time` float NOT NULL,
-  `completed` enum('No','Yes','','') NOT NULL DEFAULT 'No'
+  `completed` int(11) NOT NULL DEFAULT '0',
+  `currently_watching` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `history`
+--
+
+INSERT INTO `history` (`history_id`, `user_id`, `watch_date`, `movie_id`, `episode`, `time`, `completed`, `currently_watching`) VALUES
+(1, 15, '2018-01-02 21:00:49', 1, 1, 61.6158, 5, 0),
+(2, 15, '2018-01-02 21:35:19', 2, 1, 0, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -138,8 +148,10 @@ INSERT INTO `movies` (`movie_id`, `title`, `director`, `cast`, `plot`, `genre`, 
 (7, 'checking', 'nayim', 'nayim', 'bal kore', '[\"comedy\",\"sci-fi\",\"horror\",\"romance\",\"action\",\"drama\"]', '2017-09-28', 0),
 (8, 'ajob', 'ajob', 'asjd', 'feasd', '[\"romance\",\"action\"]', '2017-05-12', 0),
 (9, 'ajib', 'asd', 'asda', 'fasdwasd', '[\"romance\",\"action\"]', '2016-09-28', 0),
-(10, 'check genre', 'adaw', 'ad', 'adasd', '[\"comedy\",\"sci-fi\",\"horror\",\"romance\",\"action\",\"drama\"]', '2017-08-16', 0),
-(11, 'review check', 'check', 'check', 'check', '[\"romance\",\"action\"]', '2017-09-11', 2.5);
+(10, 'check genre', 'adaw', 'ad', 'adasd', '[\"comedy\",\"sci-fi\",\"horror\",\"drama\"]', '2017-08-16', 0),
+(11, 'review check', 'check', 'check', 'check', '[\"romance\",\"action\"]', '2017-09-11', 2.5),
+(12, 'Star Wars: The Last Jedi', 'Rian Johnson', ' Daisy Ridley, John Boyega, Mark Hamill ', 'Rey develops her newly discovered abilities with the guidance of Luke Skywalker, who is unsettled by the strength of her powers. Meanwhile, the Resistance prepares for battle with the First Order. ', '[\"action\",\"fantasy\"]', '2017-12-15', 0),
+(14, 'Jumanji: Welcome to the Jungle', 'Jake Kasdan', ' Dwayne Johnson, Karen Gillan, Kevin Hart', 'Four teenagers are sucked into a magical video game, and the only way they can escape is to work together to finish the game. ', '[\"comedy\",\"action\"]', '2018-01-04', 0);
 
 -- --------------------------------------------------------
 
@@ -164,7 +176,54 @@ INSERT INTO `my_list` (`my_list_id`, `user_id`, `movie_id`) VALUES
 (4, 8, 4),
 (5, 8, 5),
 (6, 8, 6),
-(7, 8, 10);
+(7, 8, 10),
+(8, 15, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `parties`
+--
+
+CREATE TABLE `parties` (
+  `id` int(11) NOT NULL,
+  `party_id` int(11) NOT NULL,
+  `leader_id` int(11) NOT NULL,
+  `party_name` varchar(255) NOT NULL,
+  `movie_id` int(11) NOT NULL DEFAULT '1'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `parties`
+--
+
+INSERT INTO `parties` (`id`, `party_id`, `leader_id`, `party_name`, `movie_id`) VALUES
+(8, 248393, 8, 'NEwGG', 1),
+(9, 455919, 5, 'HalalRoomNew', 1),
+(11, 497420, 8, 'againHalalRoom', 1),
+(13, 989222, 15, 'AVI party', 1),
+(14, 893978, 15, 'dawa', 3),
+(15, 83458, 15, 'party Checking', 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `party_invites`
+--
+
+CREATE TABLE `party_invites` (
+  `id` int(11) NOT NULL,
+  `party_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `party_invites`
+--
+
+INSERT INTO `party_invites` (`id`, `party_id`, `user_id`) VALUES
+(1, 248393, 10),
+(3, 989222, 8);
 
 -- --------------------------------------------------------
 
@@ -214,10 +273,12 @@ CREATE TABLE `subscribers` (
 --
 
 INSERT INTO `subscribers` (`subscription_id`, `user_id`, `start_date`, `expire_date`, `movie_count`, `status`) VALUES
-(1, 8, '2017-12-18', '2018-01-31', 5, 'paid'),
+(1, 8, '2017-12-18', '2018-01-31', 5, 'on'),
 (2, -1, '2017-12-19', '0000-00-00', 0, 'off'),
-(3, 14, '2017-12-19', '0000-00-00', 0, 'off'),
-(4, 15, '2017-12-24', '2018-01-28', 0, 'on');
+(3, 14, '2017-12-19', '0000-00-00', 0, 'expired'),
+(4, 15, '2017-12-24', '2018-01-28', 0, 'on'),
+(5, 16, '2018-01-03', '0000-00-00', 0, 'off'),
+(6, 17, '2018-01-03', '0000-00-00', 0, 'off');
 
 -- --------------------------------------------------------
 
@@ -250,6 +311,29 @@ INSERT INTO `transactions` (`transaction_id`, `user_id`, `date`, `amount`, `bkas
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `userdetails`
+--
+
+CREATE TABLE `userdetails` (
+  `details_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `fav_genre` text,
+  `fav_actor` text,
+  `fav_director` text
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `userdetails`
+--
+
+INSERT INTO `userdetails` (`details_id`, `user_id`, `fav_genre`, `fav_actor`, `fav_director`) VALUES
+(1, 15, '[\"horror\",\"drama\"]', '', ''),
+(2, 17, '[\"comedy\",\"mystery\"]', 'leo', 'nolan'),
+(3, 8, NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -259,6 +343,7 @@ CREATE TABLE `users` (
   `password` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `type` tinyint(1) NOT NULL DEFAULT '0',
+  `status` tinyint(4) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -267,18 +352,20 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `email`, `type`, `created_at`, `updated_at`) VALUES
-(1, 'user', 'user1234', 'user@gmail.com', 0, '2017-12-15 08:40:35', '0000-00-00 00:00:00'),
-(5, 'encrypteduser', '$2a$10$1Lxi5s7t0PJvJDzdqGO7au6n0HC0NFSMrCER/iQligT1jUMRQVoOe', 'enc@gmail.com', 0, '2017-12-15 10:48:18', '0000-00-00 00:00:00'),
-(6, 'fahim', '$2a$10$IrQcHIaJ7bNy8.Egaa4KuO4Wu9SDwMenkVcRedhdezX2UfsmnAppK', 'fahim@gmfahimail.com', 0, '2017-12-18 16:37:36', '0000-00-00 00:00:00'),
-(7, 'fahimkhan', '$2a$10$257QDbSQHDJbliJLSkT3CejNjFl9gmHU1DvG5UQ10KzDkLYfZ7U/u', 'fahimkhan@gmail.com', 0, '2017-12-18 23:35:44', NULL),
-(8, 'amar', '$2a$10$B4hH9gxd9AkvS2.R70NBxe5zhrBj.1ZvXreku97a2xaCzL0M/XSTq', 'amar@gmail.com', 0, '2017-12-18 23:38:46', NULL),
-(9, 'testing123', '$2a$10$0ewPHlfKCnnLT/qy.Il5Cu4NaxPyoPSoxLaUDoAZ9OOewuKgnEZba', 'testing@gmail.com', 0, '2017-12-19 15:09:57', NULL),
-(10, 'okokokok', '$2a$10$KD..lh7eQ8ZHo46KsUlsG.1H.EyHdrhgcW8OqodMFuxqg6Kww5JzK', 'ok@gmail.com', 0, '2017-12-19 19:27:09', NULL),
-(11, 'checknew', '$2a$10$KD..lh7eQ8ZHo46KsUlsG.1H.EyHdrhgcW8OqodMFuxqg6Kww5JzK', 'as@gmail.com', 0, '2017-12-19 22:43:57', NULL),
-(12, 'registered', '$2a$10$KD..lh7eQ8ZHo46KsUlsG.1H.EyHdrhgcW8OqodMFuxqg6Kww5JzK', 'asdwasd@gmail.com', 0, '2017-12-19 22:52:31', NULL),
-(14, 'hobena', '$2a$10$B4hH9gxd9AkvS2.R70NBxe5zhrBj.1ZvXreku97a2xaCzL0M/XSTq', 'fahim@gmail.com', 0, '2017-12-19 22:54:38', NULL),
-(15, 'admin', '$2a$10$B4hH9gxd9AkvS2.R70NBxe5zhrBj.1ZvXreku97a2xaCzL0M/XSTq', 'admin@gmail.com', 1, '2017-12-24 20:51:14', NULL);
+INSERT INTO `users` (`id`, `username`, `password`, `email`, `type`, `status`, `created_at`, `updated_at`) VALUES
+(1, 'user', 'user1234', 'user@gmail.com', 0, 0, '2017-12-15 08:40:35', '0000-00-00 00:00:00'),
+(5, 'encrypteduser', '$2a$10$1Lxi5s7t0PJvJDzdqGO7au6n0HC0NFSMrCER/iQligT1jUMRQVoOe', 'enc@gmail.com', 0, 0, '2017-12-15 10:48:18', '0000-00-00 00:00:00'),
+(6, 'fahim', '$2a$10$IrQcHIaJ7bNy8.Egaa4KuO4Wu9SDwMenkVcRedhdezX2UfsmnAppK', 'fahim@gmfahimail.com', 0, 0, '2017-12-18 16:37:36', '0000-00-00 00:00:00'),
+(7, 'fahimkhan', '$2a$10$257QDbSQHDJbliJLSkT3CejNjFl9gmHU1DvG5UQ10KzDkLYfZ7U/u', 'fahimkhan@gmail.com', 0, 0, '2017-12-18 23:35:44', NULL),
+(8, 'amar', '$2a$10$B4hH9gxd9AkvS2.R70NBxe5zhrBj.1ZvXreku97a2xaCzL0M/XSTq', 'amar@gmail.com', 0, 0, '2017-12-18 23:38:46', NULL),
+(9, 'testing123', '$2a$10$0ewPHlfKCnnLT/qy.Il5Cu4NaxPyoPSoxLaUDoAZ9OOewuKgnEZba', 'testing@gmail.com', 0, 0, '2017-12-19 15:09:57', NULL),
+(10, 'okokokok', '$2a$10$KD..lh7eQ8ZHo46KsUlsG.1H.EyHdrhgcW8OqodMFuxqg6Kww5JzK', 'ok@gmail.com', 0, 0, '2017-12-19 19:27:09', NULL),
+(11, 'checknew', '$2a$10$KD..lh7eQ8ZHo46KsUlsG.1H.EyHdrhgcW8OqodMFuxqg6Kww5JzK', 'as@gmail.com', 0, 1, '2017-12-19 22:43:57', NULL),
+(12, 'registered', '$2a$10$KD..lh7eQ8ZHo46KsUlsG.1H.EyHdrhgcW8OqodMFuxqg6Kww5JzK', 'asdwasd@gmail.com', 0, 0, '2017-12-19 22:52:31', NULL),
+(14, 'hobena', '$2a$10$B4hH9gxd9AkvS2.R70NBxe5zhrBj.1ZvXreku97a2xaCzL0M/XSTq', 'fahim@gmail.com', 0, 0, '2017-12-19 22:54:38', NULL),
+(15, 'admin', '$2a$10$B4hH9gxd9AkvS2.R70NBxe5zhrBj.1ZvXreku97a2xaCzL0M/XSTq', 'admin@gmail.com', 1, 1, '2017-12-24 20:51:14', NULL),
+(16, 'newuser', '$2a$10$IpdZhukAsr8sZ/W/2iyEuuiRlV11Io4Hb.D41f1nFvcoaNZwA3U8C', 'newuser@gmail.com', 0, 0, '2018-01-03 23:17:37', NULL),
+(17, 'finalcheck', '$2a$10$TTA9OVfbETPX9dTAtzNUNuEUZj77Nb/qNh4YFlMLuLy0znXznIrZq', 'asd@gmail.com', 0, 0, '2018-01-03 23:19:03', NULL);
 
 -- --------------------------------------------------------
 
@@ -341,6 +428,19 @@ ALTER TABLE `my_list`
   ADD PRIMARY KEY (`my_list_id`);
 
 --
+-- Indexes for table `parties`
+--
+ALTER TABLE `parties`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `party_id` (`party_id`);
+
+--
+-- Indexes for table `party_invites`
+--
+ALTER TABLE `party_invites`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `reviews`
 --
 ALTER TABLE `reviews`
@@ -357,6 +457,12 @@ ALTER TABLE `subscribers`
 --
 ALTER TABLE `transactions`
   ADD PRIMARY KEY (`transaction_id`);
+
+--
+-- Indexes for table `userdetails`
+--
+ALTER TABLE `userdetails`
+  ADD PRIMARY KEY (`details_id`);
 
 --
 -- Indexes for table `users`
@@ -380,7 +486,7 @@ ALTER TABLE `watchlist`
 -- AUTO_INCREMENT for table `buddy_list`
 --
 ALTER TABLE `buddy_list`
-  MODIFY `buddy_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `buddy_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `covers`
@@ -392,7 +498,7 @@ ALTER TABLE `covers`
 -- AUTO_INCREMENT for table `history`
 --
 ALTER TABLE `history`
-  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `likes`
@@ -404,13 +510,25 @@ ALTER TABLE `likes`
 -- AUTO_INCREMENT for table `movies`
 --
 ALTER TABLE `movies`
-  MODIFY `movie_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `movie_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `my_list`
 --
 ALTER TABLE `my_list`
-  MODIFY `my_list_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `my_list_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `parties`
+--
+ALTER TABLE `parties`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `party_invites`
+--
+ALTER TABLE `party_invites`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `reviews`
@@ -422,7 +540,7 @@ ALTER TABLE `reviews`
 -- AUTO_INCREMENT for table `subscribers`
 --
 ALTER TABLE `subscribers`
-  MODIFY `subscription_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `subscription_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `transactions`
@@ -431,10 +549,16 @@ ALTER TABLE `transactions`
   MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
+-- AUTO_INCREMENT for table `userdetails`
+--
+ALTER TABLE `userdetails`
+  MODIFY `details_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `watchlist`

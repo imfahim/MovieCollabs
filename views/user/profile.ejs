@@ -1,27 +1,41 @@
 <%- contentFor('body') %>
-<div class="container">
-  <div class="dropdown pull-right">
-   <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" <%if(reqsts.length==0){%>disabled<%}%>>Buddy Requests <span class="badge"><%=reqsts.length%></span>
+  <div class="container">
+    <div class="dropdown pull-right">
+      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" <%if(reqsts.length==0){%>disabled<%}%>>Buddy Requests <span class="badge"><%=reqsts.length%></span>
    <span class="caret"></span></button>
-   <ul class="dropdown-menu">
-     <% for(var i=0;i< reqsts.length;i++) { %>
-     <li><a href="/profile/profileOf/<%=reqsts[i].id%>"><%=reqsts[i].username%></a></li><%}%>
+      <ul class="dropdown-menu">
+        <% for(var i=0;i< reqsts.length;i++) { %>
+          <li>
+            <a href="/profile/profileOf/<%=reqsts[i].id%>">
+              <%=reqsts[i].username%>
+            </a>
+          </li>
+          <%}%>
 
-   </ul>
-  </div>
-  <div class="row">
+      </ul>
+    </div>
+    <div class="row">
       <div class="col-md-4">
         <div class="panel panel-default">
-          <div class="panel-heading"><center>My List</center></div>
+          <div class="panel-heading">
+            <center>My List</center>
+          </div>
           <div class="panel-body scroll">
             <table class="table table-striped">
               <tbody>
                 <% for(var i=0;i< mylist.length;i++) { %>
                   <tr>
-                    <td><%=i+1%>.</td>
+                    <td>
+                      <%=i+1%>.</td>
                     <td><img src="/public/poster/<%= mylist[i].movie_id %>.jpg" alt="Poster" style="height:50px"></td>
-                    <td><a href="/movie/<%= mylist[i].movie_id %>"><%= mylist[i].title %></a>
-                    <p style="font-size:11px;"><%-JSON.parse(mylist[i].genre) %></p></td>
+                    <td>
+                      <a href="/movie/<%= mylist[i].movie_id %>">
+                        <%= mylist[i].title %>
+                      </a>
+                      <p style="font-size:11px;">
+                        <%-JSON.parse(mylist[i].genre) %>
+                      </p>
+                    </td>
                   </tr>
                   <% } %>
               </tbody>
@@ -30,140 +44,211 @@
         </div>
       </div>
 
-    <div id="view"   class="col-md-8">
-      <div class="panel panel-default">
-        <div class="panel-heading"><center>Profile</center></div>
-        <div class="panel-body">
-          <table class="table">
-          <tr>
-          <th>Name:</th>
-          <td><%= userdetails[0].username %></td>
-          </tr>
-          <tr>
-          <th>Email:</th>
-          <td><%= userdetails[0].email %></td>
-          </tr>
-          <tr>
-          <th>Joined at:</th>
-          <td></td>
-          </tr>
-          <tr>
-          <th>Favourite Genre:</th>
-          <td><%= userdetails[0].fav_genre %></td>
-          </tr>
-          <tr>
-          <th>Favourite Actor:</th>
-          <td><%= userdetails[0].fav_actor %></td>
-          </tr>
-          <tr>
-          <th>Favourite Director:</th>
-          <td><%= userdetails[0].fav_director %></td>
-          </tr>
-          <tr>
-            <th></th>
+      <div id="view" class="col-md-8">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <center>Profile</center>
+          </div>
+          <div class="panel-body">
+            <table class="table">
+              <tr>
+                <th>Name:</th>
+                <td>
+                  <%= userdetails.username %>
+                </td>
+              </tr>
+              <tr>
+                <th>Email:</th>
+                <td>
+                  <%= userdetails.email %>
+                </td>
+              </tr>
+              <tr>
+                <th>Joined at:</th>
+                <td>
+                  <%=moment(userdetails.created_at).startOf('day').fromNow()%>
+                </td>
+              </tr>
+              <tr>
+                <th>Favourite Genre:</th>
+                <td>
+                  <%= JSON.parse(userdetails.fav_genre) %>
+                </td>
+              </tr>
+              <tr>
+                <th>Favourite Actor:</th>
+                <td>
+                  <%= userdetails.fav_actor %>
+                </td>
+              </tr>
+              <tr>
+                <th>Favourite Director:</th>
+                <td>
+                  <%= userdetails.fav_director %>
+                </td>
+              </tr>
+              <tr>
+                <th></th>
+                <td>
+                  <button type="button" class="btn btn-warning pull-right" data-toggle="modal" data-target="#editModal">Edit</button>
+                </td>
+              </tr>
+            </table>
 
-            <td><div class="pull-right"><a href="#" class="btn btn-success" onclick="document.getElementById("view").style.display='none'">Edit</a></div></td>
-          </tr>
-</table>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <center>Watch List</center>
+          </div>
+          <div class="panel-body scroll">
+            <table class="table table-striped">
+              <tbody>
+                <% for(var i=0;i< watchlist.length;i++) { %>
+                  <tr>
+                    <td>
+                      <%=i+1%>.</td>
+                    <td><img src="/public/poster/<%= watchlist[i].movie_id %>.jpg" alt="Poster" style="height:50px"></td>
+                    <td>
+                      <a href="/movie/<%= watchlist[i].movie_id %>">
+                        <%= watchlist[i].title %>
+                      </a>
+                    </td>
+                  </tr>
+                  <% } %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal fade" id="editModal" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title"><center>Edit Profile</center></h4>
+            </div>
+            <div class="modal-body">
+              <form method="POST" action="/profile/edit">
+                <table class="table">
+                  <tr>
+                    <th>Name:</th>
+                    <td>
+                      <%= userdetails.username %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Email:</th>
+                    <td>
+                      <%= userdetails.email %>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Favourite Genre:</th>
+                    <td>
+                      <div class="checkbox-inline">
+                        <label><input type="checkbox" name="genre" value="comedy">Comedy</label>
+                      </div>
+                      <div class="checkbox-inline">
+                        <label><input type="checkbox" name="genre" value="sci-fi">Sci-fi</label>
+                      </div>
+                      <div class="checkbox-inline">
+                        <label><input type="checkbox" name="genre" value="horror">Horror</label>
+                      </div>
+                      <div class="checkbox-inline">
+                        <label><input type="checkbox" name="genre" value="romance">Romance</label>
+                      </div>
+                      <div class="checkbox-inline">
+                        <label><input type="checkbox" name="genre" value="action">Action</label>
+                      </div>
+                      <div class="checkbox-inline">
+                        <label><input type="checkbox" name="genre" value="drama">Drama</label>
+                      </div>
+                      <div class="checkbox-inline">
+                        <label><input type="checkbox" name="genre" value="animation">Animation</label>
+                      </div>
+                      <div class="checkbox-inline">
+                        <label><input type="checkbox" name="genre" value="fantasy">Fantasy</label>
+                      </div>
+                      <div class="checkbox-inline">
+                        <label><input type="checkbox" name="genre" value="mystery">Mystery</label>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Favourite Actor:</th>
+                    <td><input type="text" name="f_actor" value="<%= userdetails.fav_actor %>"></td>
+                  </tr>
+                  <tr>
+                    <th>Favourite Director:</th>
+                    <td><input type="text" name="f_director" value="<%= userdetails.fav_director %>"></td>
+                  </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+              <button type="submit" class="btn btn-success">Submit</button>
+              </form>
+            </div>
+          </div>
 
         </div>
       </div>
 
-    <div  class="col-md-8">
-  <div class="panel panel-default">
-    <div class="panel-heading"><center>Profile</center></div>
-    <div class="panel-body">
-      <table class="table">
-      <tr>
-      <th>Name:</th>
-      <td><%= userdetails[0].username %></td>
-      </tr>
-      <tr>
-      <th>Email:</th>
-      <td><%= userdetails[0].email %></td>
-      </tr>
-      <tr>
-      <th>Joined at:</th>
-      <td></td>
-      </tr>
-      <tr>
-      <th>Favourite Genre:</th>
-      <td><input type="text" name="f_genre" value="<%= userdetails[0].fav_genre %>"></td>
-      </tr>
-      <tr>
-      <th>Favourite Actor:</th>
-      <td><input type="text" name="f_actor" value="<%= userdetails[0].fav_actor %>"></td>
-      </tr>
-      <tr>
-      <th>Favourite Director:</th>
-      <td><input type="text" name="f_director" value="<%= userdetails[0].fav_director %>"></td>
-      </tr>
-      <tr>
-        <th></th>
-        <td><div class="pull-right"><a href="#" class="btn btn-success" onclick="myFunction("edit", "view")">Back</a></div></td>
-      </tr>
-    </table>
-  </div>
-  </div>
-</div>
 
-
-
-
-
-
-
-
-
-      <div class="panel panel-default">
-        <div class="panel-heading"><center>History</center></div>
-        <div class="panel-body">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Title</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Completed</th>
-                <th>Watching</th>
-              </tr>
-            </thead>
-            <tbody>
-          <%for(var i=0;i< history.length;i++){%>
-              <tr>
-                <td><%=i+1%></td>
-                <td><a href="/movie/<%= history[i].movie_id %>"><%=history[i].title%></a></td>
-                <td><%=moment(history[i].watch_date).format('DD/MM/YYYY')%></td>
-                <td><%=moment(history[i].watch_date).format('h:mm:ss a')%></td>
-                <td><%=history[i].completed%></td>
-                <td><%if(history[i].currently_watching){%><span class="glyphicon glyphicon-one-fine-dot" style="color:green"></span><%}%></td>
-              </tr>
-            <%}%>
-            </tbody>
-          </table>
-
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="panel panel-default">
-        <div class="panel-heading"><center>Watch List</center></div>
-        <div class="panel-body scroll">
-          <table class="table table-striped">
-            <tbody>
-              <% for(var i=0;i< watchlist.length;i++) { %>
+      <div class="col-md-8">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <center>History</center>
+          </div>
+          <div class="panel-body">
+            <table class="table table-striped">
+              <thead>
                 <tr>
-                  <td><%=i+1%>.</td>
-                  <td><img src="/public/poster/<%= watchlist[i].movie_id %>.jpg" alt="Poster" style="height:50px"></td>
-                  <td><a href="/movie/<%= watchlist[i].movie_id %>"><%= watchlist[i].title %></a></td>
+                  <th>#</th>
+                  <th>Title</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Completed</th>
+                  <th>Watching</th>
                 </tr>
-                <% } %>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <%for(var i=0;i< history.length;i++){%>
+                  <tr>
+                    <td>
+                      <%=i+1%>
+                    </td>
+                    <td>
+                      <a href="/movie/<%= history[i].movie_id %>">
+                        <%=history[i].title%>
+                      </a>
+                    </td>
+                    <td>
+                      <%=moment(history[i].watch_date).format('DD/MM/YYYY')%>
+                    </td>
+                    <td>
+                      <%=moment(history[i].watch_date).format('h:mm:ss a')%>
+                    </td>
+                    <td>
+                      <%=history[i].completed%>
+                    </td>
+                    <td>
+                      <%if(history[i].currently_watching){%><span class="glyphicon glyphicon-one-fine-dot" style="color:green"></span>
+                        <%}%>
+                    </td>
+                  </tr>
+                  <%}%>
+              </tbody>
+            </table>
+
+          </div>
         </div>
       </div>
     </div>
 
-</div>
-</div>
+
+  </div>

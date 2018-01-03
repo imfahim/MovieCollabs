@@ -2,6 +2,7 @@
 const express = require('express');
 const moment = require('moment');
 const router = express.Router();
+const fs = require('fs');
 
 // MODELS
 const moviesModel = require.main.require('./models/movies');
@@ -24,7 +25,32 @@ router.all('*', (request, response, next) => {
 		next();
 	}
 });
+router.post('/delete',(request,response,next)=>{
+	var movie_id=request.body.movie_id;
+	fs.unlink('./public/poster/'+movie_id+'.jpg',function(error){
+		if(error){
+			request.flash('fail',error,'/admin/charts');
+		}
+		else{
+			fs.unlink('./public/movies/'+movie_id+'.mp4',function(error){
+				if(error){
+					request.flash('fail',error,'/admin/charts');
+				}
+				else{
+					moviesModel.delete(movie_id,(flag)=>{
+						if(flag){
+							request.flash('success','Succesfully Deleted','/admin/charts');
+						}
+						else{
+							request.flash('fail','DB Error','/admin/charts');
+						}
+					});
+				}
+			});
+		}
+	});
 
+});
 router.get('/:id', (request, response, next) => {
   var movie_id = request.params.id;
   moviesModel.getMovieById(movie_id, (result) => {
