@@ -161,6 +161,7 @@ router.post('/upload',[
 			genre: (req.body.genre != null) ? JSON.stringify(req.body.genre) : '',
       date:mDate
     };
+		console.log(new_movie);
     movieModel.insertGetid(new_movie,function(valid){
       if(valid>0){
 						if (!req.files)
