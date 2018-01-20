@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 03, 2018 at 10:47 PM
--- Server version: 10.1.26-MariaDB
--- PHP Version: 7.1.9
+-- Generation Time: Jan 20, 2018 at 08:27 AM
+-- Server version: 10.1.29-MariaDB
+-- PHP Version: 7.2.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -88,8 +88,11 @@ CREATE TABLE `history` (
 --
 
 INSERT INTO `history` (`history_id`, `user_id`, `watch_date`, `movie_id`, `episode`, `time`, `completed`, `currently_watching`) VALUES
-(1, 15, '2018-01-02 21:00:49', 1, 1, 61.6158, 5, 0),
-(2, 15, '2018-01-02 21:35:19', 2, 1, 0, 1, 1);
+(1, 15, '2018-01-03 19:04:32', 1, 1, 102.439, 5, 0),
+(2, 15, '2018-01-02 21:35:19', 2, 1, 0, 1, 0),
+(3, 15, '2018-01-03 19:01:00', 17, 1, 0, 1, 0),
+(4, 8, '2018-01-03 19:53:23', 14, 1, 27.5488, 0, 0),
+(5, 8, '2018-01-04 21:53:46', 1, 1, 2.87608, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -115,7 +118,8 @@ INSERT INTO `likes` (`id`, `movie_id`, `user_id`, `status`) VALUES
 (11, 11, 12, 'dislike'),
 (19, 11, 11, 'like'),
 (20, 11, 10, 'like'),
-(21, 3, 15, 'dislike');
+(21, 3, 15, 'dislike'),
+(22, 14, 8, 'like');
 
 -- --------------------------------------------------------
 
@@ -151,7 +155,9 @@ INSERT INTO `movies` (`movie_id`, `title`, `director`, `cast`, `plot`, `genre`, 
 (10, 'check genre', 'adaw', 'ad', 'adasd', '[\"comedy\",\"sci-fi\",\"horror\",\"drama\"]', '2017-08-16', 0),
 (11, 'review check', 'check', 'check', 'check', '[\"romance\",\"action\"]', '2017-09-11', 2.5),
 (12, 'Star Wars: The Last Jedi', 'Rian Johnson', ' Daisy Ridley, John Boyega, Mark Hamill ', 'Rey develops her newly discovered abilities with the guidance of Luke Skywalker, who is unsettled by the strength of her powers. Meanwhile, the Resistance prepares for battle with the First Order. ', '[\"action\",\"fantasy\"]', '2017-12-15', 0),
-(14, 'Jumanji: Welcome to the Jungle', 'Jake Kasdan', ' Dwayne Johnson, Karen Gillan, Kevin Hart', 'Four teenagers are sucked into a magical video game, and the only way they can escape is to work together to finish the game. ', '[\"comedy\",\"action\"]', '2018-01-04', 0);
+(14, 'Jumanji: Welcome to the Jungle', 'Jake Kasdan', ' Dwayne Johnson, Karen Gillan, Kevin Hart', 'Four teenagers are sucked into a magical video game, and the only way they can escape is to work together to finish the game. ', '[\"comedy\",\"action\"]', '2018-01-04', 5),
+(16, 'errorCHeck', 'new', 'enew', 'newkne', '[\"comedy\",\"romance\"]', '2018-01-04', 0),
+(17, 'Get Out', 'Jordan Peele', 'Daniel Kaluuya, Allison Williams', 'Now that Chris (Daniel Kaluuya) and his girlfriend, Rose (Allison Williams)', '[\"horror\",\"mystery\"]', '2018-01-04', 0);
 
 -- --------------------------------------------------------
 
@@ -203,7 +209,9 @@ INSERT INTO `parties` (`id`, `party_id`, `leader_id`, `party_name`, `movie_id`) 
 (11, 497420, 8, 'againHalalRoom', 1),
 (13, 989222, 15, 'AVI party', 1),
 (14, 893978, 15, 'dawa', 3),
-(15, 83458, 15, 'party Checking', 3);
+(15, 83458, 15, 'party Checking', 3),
+(16, 417063, 8, 'get Out', 17),
+(17, 146891, 8, 'hjjkhk', 17);
 
 -- --------------------------------------------------------
 
@@ -223,7 +231,9 @@ CREATE TABLE `party_invites` (
 
 INSERT INTO `party_invites` (`id`, `party_id`, `user_id`) VALUES
 (1, 248393, 10),
-(3, 989222, 8);
+(3, 989222, 8),
+(4, 417063, 15),
+(5, 248393, 15);
 
 -- --------------------------------------------------------
 
@@ -251,7 +261,8 @@ INSERT INTO `reviews` (`id`, `user_id`, `movie_id`, `text_review`, `created_at`)
 (6, 8, 15, 'Vallagse', '2017-12-28 13:44:08'),
 (7, 15, 11, 'ami first', '2017-12-28 16:45:00'),
 (8, 15, 11, 'now', '2017-12-29 18:28:39'),
-(9, 15, 3, 'yo', '2017-12-31 16:58:27');
+(9, 15, 3, 'yo', '2017-12-31 16:58:27'),
+(10, 8, 1, 'koi', '2018-01-04 13:54:24');
 
 -- --------------------------------------------------------
 
@@ -278,7 +289,9 @@ INSERT INTO `subscribers` (`subscription_id`, `user_id`, `start_date`, `expire_d
 (3, 14, '2017-12-19', '0000-00-00', 0, 'expired'),
 (4, 15, '2017-12-24', '2018-01-28', 0, 'on'),
 (5, 16, '2018-01-03', '0000-00-00', 0, 'off'),
-(6, 17, '2018-01-03', '0000-00-00', 0, 'off');
+(6, 17, '2018-01-03', '2018-02-04', 0, 'on'),
+(7, 19, '2018-01-04', '2018-02-04', 0, 'on'),
+(8, 20, '2018-01-05', '0000-00-00', 0, 'off');
 
 -- --------------------------------------------------------
 
@@ -306,7 +319,9 @@ INSERT INTO `transactions` (`transaction_id`, `user_id`, `date`, `amount`, `bkas
 (5, 8, '2017-12-19', 9.99, 894),
 (6, 15, '2017-12-28', 9.99, 124),
 (7, 8, '2017-12-31', 9.99, 458),
-(8, 8, '2017-12-31', 9.99, 894);
+(8, 8, '2017-12-31', 9.99, 894),
+(9, 17, '2018-01-04', 9.99, 1255461),
+(10, 19, '2018-01-04', 9.99, 123);
 
 -- --------------------------------------------------------
 
@@ -329,7 +344,9 @@ CREATE TABLE `userdetails` (
 INSERT INTO `userdetails` (`details_id`, `user_id`, `fav_genre`, `fav_actor`, `fav_director`) VALUES
 (1, 15, '[\"horror\",\"drama\"]', '', ''),
 (2, 17, '[\"comedy\",\"mystery\"]', 'leo', 'nolan'),
-(3, 8, NULL, NULL, NULL);
+(3, 8, '[\"comedy\",\"sci-fi\"]', 'as', 'asdf'),
+(4, 19, NULL, NULL, NULL),
+(5, 20, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -357,15 +374,17 @@ INSERT INTO `users` (`id`, `username`, `password`, `email`, `type`, `status`, `c
 (5, 'encrypteduser', '$2a$10$1Lxi5s7t0PJvJDzdqGO7au6n0HC0NFSMrCER/iQligT1jUMRQVoOe', 'enc@gmail.com', 0, 0, '2017-12-15 10:48:18', '0000-00-00 00:00:00'),
 (6, 'fahim', '$2a$10$IrQcHIaJ7bNy8.Egaa4KuO4Wu9SDwMenkVcRedhdezX2UfsmnAppK', 'fahim@gmfahimail.com', 0, 0, '2017-12-18 16:37:36', '0000-00-00 00:00:00'),
 (7, 'fahimkhan', '$2a$10$257QDbSQHDJbliJLSkT3CejNjFl9gmHU1DvG5UQ10KzDkLYfZ7U/u', 'fahimkhan@gmail.com', 0, 0, '2017-12-18 23:35:44', NULL),
-(8, 'amar', '$2a$10$B4hH9gxd9AkvS2.R70NBxe5zhrBj.1ZvXreku97a2xaCzL0M/XSTq', 'amar@gmail.com', 0, 0, '2017-12-18 23:38:46', NULL),
+(8, 'amar', '$2a$10$B4hH9gxd9AkvS2.R70NBxe5zhrBj.1ZvXreku97a2xaCzL0M/XSTq', 'amar@gmail.com', 0, 1, '2017-12-18 23:38:46', NULL),
 (9, 'testing123', '$2a$10$0ewPHlfKCnnLT/qy.Il5Cu4NaxPyoPSoxLaUDoAZ9OOewuKgnEZba', 'testing@gmail.com', 0, 0, '2017-12-19 15:09:57', NULL),
 (10, 'okokokok', '$2a$10$KD..lh7eQ8ZHo46KsUlsG.1H.EyHdrhgcW8OqodMFuxqg6Kww5JzK', 'ok@gmail.com', 0, 0, '2017-12-19 19:27:09', NULL),
 (11, 'checknew', '$2a$10$KD..lh7eQ8ZHo46KsUlsG.1H.EyHdrhgcW8OqodMFuxqg6Kww5JzK', 'as@gmail.com', 0, 1, '2017-12-19 22:43:57', NULL),
 (12, 'registered', '$2a$10$KD..lh7eQ8ZHo46KsUlsG.1H.EyHdrhgcW8OqodMFuxqg6Kww5JzK', 'asdwasd@gmail.com', 0, 0, '2017-12-19 22:52:31', NULL),
 (14, 'hobena', '$2a$10$B4hH9gxd9AkvS2.R70NBxe5zhrBj.1ZvXreku97a2xaCzL0M/XSTq', 'fahim@gmail.com', 0, 0, '2017-12-19 22:54:38', NULL),
 (15, 'admin', '$2a$10$B4hH9gxd9AkvS2.R70NBxe5zhrBj.1ZvXreku97a2xaCzL0M/XSTq', 'admin@gmail.com', 1, 1, '2017-12-24 20:51:14', NULL),
-(16, 'newuser', '$2a$10$IpdZhukAsr8sZ/W/2iyEuuiRlV11Io4Hb.D41f1nFvcoaNZwA3U8C', 'newuser@gmail.com', 0, 0, '2018-01-03 23:17:37', NULL),
-(17, 'finalcheck', '$2a$10$TTA9OVfbETPX9dTAtzNUNuEUZj77Nb/qNh4YFlMLuLy0znXznIrZq', 'asd@gmail.com', 0, 0, '2018-01-03 23:19:03', NULL);
+(16, 'newuser', '$2a$10$IpdZhukAsr8sZ/W/2iyEuuiRlV11Io4Hb.D41f1nFvcoaNZwA3U8C', 'newuser@gmail.com', 0, 1, '2018-01-03 23:17:37', NULL),
+(17, 'finalcheck', '$2a$10$TTA9OVfbETPX9dTAtzNUNuEUZj77Nb/qNh4YFlMLuLy0znXznIrZq', 'asd@gmail.com', 0, 1, '2018-01-03 23:19:03', NULL),
+(19, 'newuser12', '$2a$10$GIYlLD3.RKJ0AffQfJdxfuGOs416vdxsi0V2USb3fFrLYoNDkBrVW', 'asdasd@gmail.com', 0, 0, '2018-01-04 13:55:50', NULL),
+(20, 'raihan', '$2a$10$MZFkO5XI6pbZ4KpZC2S9.eatvhzbx2VmiXWrRQUQGIpQ1BnyO9eZG', 'raihan@gmail.com', 0, 0, '2018-01-05 03:50:32', NULL);
 
 -- --------------------------------------------------------
 
@@ -498,19 +517,19 @@ ALTER TABLE `covers`
 -- AUTO_INCREMENT for table `history`
 --
 ALTER TABLE `history`
-  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `likes`
 --
 ALTER TABLE `likes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `movies`
 --
 ALTER TABLE `movies`
-  MODIFY `movie_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `movie_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `my_list`
@@ -522,43 +541,43 @@ ALTER TABLE `my_list`
 -- AUTO_INCREMENT for table `parties`
 --
 ALTER TABLE `parties`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `party_invites`
 --
 ALTER TABLE `party_invites`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `subscribers`
 --
 ALTER TABLE `subscribers`
-  MODIFY `subscription_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `subscription_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `userdetails`
 --
 ALTER TABLE `userdetails`
-  MODIFY `details_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `details_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `watchlist`
